@@ -238,7 +238,8 @@
         class AuthManager {
             constructor() {
                 this.token = localStorage.getItem('auth_token');
-                this.baseURL = 'http://localhost:3002';
+                // Use current host instead of hardcoded localhost for deployment compatibility
+                this.baseURL = window.location.origin;
             }
 
             async login(password) {
