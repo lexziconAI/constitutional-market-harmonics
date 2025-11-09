@@ -9,4 +9,14 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: HOST
+        value: 0.0.0.0
     healthCheckPath: /api/health
+    # Chaos optimization: Ensure proper startup timing
+    readinessProbe:
+      path: /api/health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 3
