@@ -12,7 +12,7 @@ services:
       - key: HOST
         value: 0.0.0.0
     healthCheckPath: /api/health
-    # Chaos optimization: Ensure proper startup timing
+    # Chaos optimization: Ensure proper startup timing - v2
     readinessProbe:
       path: /api/health
       initialDelaySeconds: 5
