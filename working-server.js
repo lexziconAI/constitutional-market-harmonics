@@ -42,10 +42,10 @@ function getCorsHeaders(origin) {
         'http://127.0.0.1:3001',
         'https://constitutional-market-harmonics-dashboard.onrender.com'
     ];
-    const isAllowed = allowedOrigins.includes(origin) || !origin; // Allow requests with no origin (same-origin)
 
+    // Allow all origins for now to avoid CORS issues
     return {
-        'Access-Control-Allow-Origin': isAllowed ? (origin || 'https://constitutional-market-harmonics-dashboard.onrender.com') : 'https://constitutional-market-harmonics-dashboard.onrender.com',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     };
@@ -53,13 +53,20 @@ function getCorsHeaders(origin) {
 
 // Create server
 const server = http.createServer((req, res) => {
-    // Handle CORS preflight
-    if (req.method === 'OPTIONS') {
+    try {
+        console.log('Request received:', req.method, req.url, req.headers.host);
+        // Handle CORS preflight
+        if (req.method === 'OPTIONS') {
+            const corsHeaders = getCorsHeaders(req.headers.origin);
+            res.writeHead(200, corsHeaders);
+            res.end();
+            return;
+        }
+
+        const url = new URL(req.url, `http://${req.headers.host || 'localhost:3002'}`);
+        const pathname = url.pathname;
+        console.log('Parsed pathname:', pathname);
         const corsHeaders = getCorsHeaders(req.headers.origin);
-        res.writeHead(200, corsHeaders);
-        res.end();
-        return;
-    }
 
     // Serve dashboard HTML at root
     if (pathname === '/' && req.method === 'GET') {
@@ -76,6 +83,8 @@ const server = http.createServer((req, res) => {
             return;
         }
     }
+
+    // Login endpoint
     if (pathname === '/api/auth/login' && req.method === 'POST') {
         let body = '';
         req.on('data', chunk => body += chunk);
@@ -555,10 +564,15 @@ const server = http.createServer((req, res) => {
     // 404
     res.writeHead(404, { ...corsHeaders, 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: false, error: 'Endpoint not found' }));
+    } catch (error) {
+        console.error('Server error:', error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: 'Internal server error' }));
+    }
 });
 
 const PORT = process.env.PORT || 3002;
-const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
+const HOST = '0.0.0.0';
 server.listen(PORT, HOST, () => {
     console.log('🔐 Constitutional Market Harmonics - Full Web Dashboard Server');
     console.log(`✅ Running on http://${HOST}:${PORT}`);

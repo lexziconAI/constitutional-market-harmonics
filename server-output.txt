@@ -1,0 +1,17 @@
+🔐 Constitutional Market Harmonics - Full Web Dashboard Server
+✅ Running on http://0.0.0.0:3002
+💚 Fractal Love: Profit + Ethics + Security
+🔑 Authentication: Simple token-based
+🛡️ API Keys: Server-side only
+
+Routes:
+  GET  / - Dashboard HTML page
+  POST /api/auth/login - Login (password: fractal2025)
+  GET  /api/dashboard - Portfolio data (requires auth)
+  GET  /api/chaos - Chaos attractors (requires auth)
+  GET  /api/international-portfolio - Intl holdings (requires auth)
+  POST /api/chat - AI analysis chat (requires auth)
+  GET  /api/antenarrative - Boje analysis (requires auth)
+  GET  /api/health - Health check
+
+🌐 Open your browser to the deployment URL to access the dashboard
