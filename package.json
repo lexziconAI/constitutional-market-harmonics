@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node working-server.js"
+    "start": "node working-server-fixed.js"
   },
   "engines": {
     "node": ">=18.0.0"
