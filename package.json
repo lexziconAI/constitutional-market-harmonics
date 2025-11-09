@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node working-server.js",
+    "build": "echo 'No build step required'",
+    "start": "node working-server.js",
     "lint": "eslint"
   },
   "dependencies": {
