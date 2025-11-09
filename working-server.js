@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {
             return;
         }
 
-        const url = new URL(req.url, `http://${req.headers.host || 'localhost:3002'}`);
+        const url = new URL(req.url, `http://localhost`);
         const pathname = url.pathname;
         console.log('Parsed pathname:', pathname);
         const corsHeaders = getCorsHeaders(req.headers.origin);
@@ -573,6 +573,7 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 3002;
 const HOST = '0.0.0.0';
+console.log(`Starting server on ${HOST}:${PORT}`);
 server.listen(PORT, HOST, () => {
     console.log('🔐 Constitutional Market Harmonics - Full Web Dashboard Server');
     console.log(`✅ Running on http://${HOST}:${PORT}`);
