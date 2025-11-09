@@ -1,0 +1,61 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer glow effect -->
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="70%" style="stop-color:#3b82f6;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background circle with Pixar-style smooth edges -->
+  <circle cx="60" cy="60" r="55" fill="url(#mainGradient)" stroke="url(#accentGradient)" stroke-width="2" filter="url(#glow)"/>
+
+  <!-- Center glow -->
+  <circle cx="60" cy="60" r="45" fill="url(#centerGlow)" opacity="0.6"/>
+
+  <!-- Pixar-style fractal spirals with smooth curves -->
+  <path d="M60 60c-12 0-12-12-12-12s0-12 12-12 12 12 12 12 0 12-12 12z" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.9" stroke-linecap="round"/>
+  <path d="M60 60c-9 0-9-9-9-9s0-9 9-9 9 9 9 9 0 9-9 9z" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity="0.8" stroke-linecap="round"/>
+  <path d="M60 60c-6 0-6-6-6-6s0-6 6-6 6 6 6 6 0 6-6 6z" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+
+  <!-- Pixar-style market chart with smooth curves -->
+  <path d="M35 75 Q40 70 45 72 Q50 68 55 71 Q60 67 65 70 Q70 66 75 69 Q80 72 85 68" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="55" cy="71" r="2" fill="#10b981"/>
+  <circle cx="65" cy="70" r="2" fill="#10b981"/>
+  <circle cx="75" cy="69" r="2" fill="#10b981"/>
+
+  <!-- Pixar-style constitutional pillars with rounded tops -->
+  <rect x="45" y="45" width="3" height="15" fill="url(#accentGradient)" rx="1.5"/>
+  <rect x="52" y="42" width="3" height="18" fill="url(#accentGradient)" rx="1.5"/>
+  <rect x="59" y="47" width="3" height="13" fill="url(#accentGradient)" rx="1.5"/>
+  <rect x="66" y="45" width="3" height="15" fill="url(#accentGradient)" rx="1.5"/>
+
+  <!-- Pixar-style decorative elements -->
+  <circle cx="40" cy="40" r="3" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="80" cy="40" r="2.5" fill="#06b6d4" opacity="0.8"/>
+  <circle cx="45" cy="85" r="2" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="75" cy="85" r="2.5" fill="#10b981" opacity="0.7"/>
+
+  <!-- AXIOM-X text with Pixar-style typography -->
+  <text x="60" y="100" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="0.5">AXIOM-X</text>
+  <text x="60" y="112" text-anchor="middle" fill="#fbbf24" font-family="Arial, sans-serif" font-size="6" font-weight="400" opacity="0.9">CHAOS THEORY</text>
+</svg>

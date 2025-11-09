@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constitutional Market Harmonics - Secure Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .login-form {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <!-- Login Form -->
+    <div id="loginContainer" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="login-form rounded-lg p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">🔐 Secure Access</h1>
+                <p class="text-gray-400">Constitutional Market Harmonics</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Development Password
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
+                        placeholder="Enter development password"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                    id="loginButton"
+                >
+                    <span id="loginText">Authenticate</span>
+                    <div id="loginSpinner" class="hidden ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                </button>
+            </form>
+
+            <div id="loginError" class="mt-4 text-red-400 text-sm text-center hidden">
+                Invalid credentials. Please try again.
+            </div>
+
+            <div class="mt-6 text-xs text-gray-500 text-center">
+                🔒 Local Development Environment<br>
+                Authentication required for security
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (hidden initially) -->
+    <div id="dashboardContainer" class="hidden">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-5xl font-bold text-white mb-2">
+                        🌀 Constitutional Market Harmonics
+                    </h1>
+                    <p class="text-gray-400 text-lg">
+                        Fractal Love: Harmonizing Profit with Constitutional Alignment 💚
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="status" class="inline-block px-4 py-2 rounded-lg card">
+                        <span class="text-green-400 pulse">● SECURE</span>
+                        <span class="text-gray-300 ml-3">Authenticated</span>
+                    </div>
+                    <button
+                        id="logoutButton"
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-200"
+                    >
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card rounded-lg p-6">
+                <div class="text-gray-400 text-sm mb-2">Portfolio Value</div>
+                <div id="portfolioValue" class="text-3xl font-bold text-white">Loading...</div>
+                <div id="portfolioChange" class="text-sm mt-2"></div>
+            </div>
+
+            <div class="card rounded-lg p-6">
+                <div class="text-gray-400 text-sm mb-2">ROI</div>
+                <div id="roi" class="text-3xl font-bold text-white">Loading...</div>
+                <div id="sharpe" class="text-sm text-gray-400 mt-2">Sharpe: --</div>
+            </div>
+
+            <div class="card rounded-lg p-6">
+                <div class="text-gray-400 text-sm mb-2">Constitutional Score</div>
+                <div id="constScore" class="text-3xl font-bold text-white">Loading...</div>
+                <div class="text-sm text-gray-400 mt-2">Ethical Alignment</div>
+            </div>
+
+            <div class="card rounded-lg p-6">
+                <div class="text-gray-400 text-sm mb-2">Cash Reserve</div>
+                <div id="cash" class="text-3xl font-bold text-white">Loading...</div>
+                <div class="text-sm text-gray-400 mt-2">Available</div>
+            </div>
+        </div>
+
+        <!-- International Portfolio -->
+        <div class="card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">🌍 International Portfolio</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-900/30 rounded-lg p-4">
+                    <div class="text-blue-400 text-sm mb-1">International Allocation</div>
+                    <div id="intlAllocation" class="text-2xl font-bold text-white">Loading...</div>
+                </div>
+                <div class="bg-green-900/30 rounded-lg p-4">
+                    <div class="text-green-400 text-sm mb-1">Countries</div>
+                    <div id="intlCountries" class="text-2xl font-bold text-white">Loading...</div>
+                </div>
+                <div class="bg-purple-900/30 rounded-lg p-4">
+                    <div class="text-purple-400 text-sm mb-1">Regions</div>
+                    <div id="intlRegions" class="text-2xl font-bold text-white">Loading...</div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="pb-3 text-gray-400">Symbol</th>
+                            <th class="pb-3 text-gray-400">Country</th>
+                            <th class="pb-3 text-gray-400">Region</th>
+                            <th class="pb-3 text-gray-400">Value</th>
+                            <th class="pb-3 text-gray-400">Gain/Loss</th>
+                            <th class="pb-3 text-gray-400">Exchange</th>
+                        </tr>
+                    </thead>
+                    <tbody id="internationalTable">
+                        <tr><td colspan="6" class="py-4 text-gray-400 text-center">Loading international holdings...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Fractal Chat Interface -->
+        <div class="card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">� Fractal AI Chat</h2>
+            <p class="text-gray-400 mb-4">Constitutional harmonics analysis powered by AI</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <div id="chatMessages" class="bg-gray-900 rounded-lg p-4 h-64 overflow-y-auto space-y-3 mb-4">
+                        <div class="text-gray-400 text-sm text-center">Welcome to Constitutional AI Chat. Ask me about your portfolio, market patterns, or fractal analysis.</div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <input
+                            type="text"
+                            id="chatInput"
+                            class="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Ask about portfolio analysis..."
+                        >
+                        <button
+                            id="chatSend"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center"
+                        >
+                            <span id="chatSendText">Send</span>
+                            <div id="chatSpinner" class="hidden ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-3">Analysis Metrics</h3>
+                    <div class="space-y-3">
+                        <div class="bg-gray-800/50 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Sentiment</div>
+                            <div id="chatSentiment" class="text-lg font-semibold text-white">--</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Confidence</div>
+                            <div id="chatConfidence" class="text-lg font-semibold text-white">--%</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Fractal Score</div>
+                            <div id="chatFractalScore" class="text-lg font-semibold text-white">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="card rounded-lg p-6">
+            <h2 class="text-xl font-bold text-white mb-4">System Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <span class="text-gray-400">Backend API:</span>
+                    <span class="text-green-400 ml-2">✓ http://localhost:3002</span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Last Update:</span>
+                    <span id="lastUpdate" class="text-gray-300 ml-2">--</span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Refresh Interval:</span>
+                    <span class="text-gray-300 ml-2">5 seconds</span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Security:</span>
+                    <span class="text-blue-400 ml-2">JWT Authentication</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Secure authentication and API management
+        class AuthManager {
+            constructor() {
+                this.token = localStorage.getItem('auth_token');
+                this.baseURL = 'http://localhost:3002';
+            }
+
+            async login(password) {
+                try {
+                    const response = await fetch(`${this.baseURL}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Invalid credentials');
+                    }
+
+                    const data = await response.json();
+                    this.token = data.token;
+                    localStorage.setItem('auth_token', this.token);
+                    return { success: true, user: data.user };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+
+            logout() {
+                this.token = null;
+                localStorage.removeItem('auth_token');
+                showLoginForm();
+            }
+
+            isAuthenticated() {
+                return !!this.token;
+            }
+
+            async makeAuthenticatedRequest(endpoint, options = {}) {
+                if (!this.isAuthenticated()) {
+                    throw new Error('Not authenticated');
+                }
+
+                const headers = {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                };
+
+                const response = await fetch(`${this.baseURL}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    this.logout();
+                    throw new Error('Authentication expired');
+                }
+
+                return response;
+            }
+        }
+
+        const auth = new AuthManager();
+
+        // UI Management
+        function showLoginForm() {
+            document.getElementById('loginContainer').classList.remove('hidden');
+            document.getElementById('dashboardContainer').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('dashboardContainer').classList.remove('hidden');
+        }
+
+        // Format currency
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        };
+
+        // Format percentage
+        const formatPercent = (value) => {
+            return (value * 100).toFixed(2) + '%';
+        };
+
+        // Get score color
+        const getScoreColor = (score) => {
+            if (score >= 0.8) return 'text-green-400';
+            if (score >= 0.6) return 'text-yellow-400';
+            return 'text-red-400';
+        };
+
+        // Load international portfolio data
+        async function loadInternationalPortfolio() {
+            try {
+                const response = await auth.makeAuthenticatedRequest('/api/international-portfolio');
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result;
+
+                    // Update summary stats
+                    const intlAllocationEl = document.getElementById('intlAllocation');
+                    const intlCountriesEl = document.getElementById('intlCountries');
+                    const intlRegionsEl = document.getElementById('intlRegions');
+                    const internationalTableEl = document.getElementById('internationalTable');
+
+                    if (intlAllocationEl) intlAllocationEl.textContent = formatPercent(data.summary.internationalAllocation);
+                    if (intlCountriesEl) intlCountriesEl.textContent = data.international.diversification.countries;
+                    if (intlRegionsEl) intlRegionsEl.textContent = data.international.diversification.regions;
+
+                    // Update international positions table
+                    if (internationalTableEl) {
+                        const intlHTML = data.international.positions.map(pos => `
+                            <tr class="border-b border-gray-700/50">
+                                <td class="py-3 text-white font-semibold">${pos.symbol}</td>
+                                <td class="py-3 text-gray-300">${pos.country}</td>
+                                <td class="py-3 text-gray-300">${pos.region}</td>
+                                <td class="py-3 text-gray-300">${formatCurrency(pos.currentValue)}</td>
+                                <td class="py-3 ${pos.gain >= 0 ? 'text-green-400' : 'text-red-400'}">
+                                    ${pos.gain >= 0 ? '+' : ''}${formatCurrency(pos.gain)} (${pos.gainPercent >= 0 ? '+' : ''}${pos.gainPercent}%)
+                                </td>
+                                <td class="py-3 text-gray-300 text-sm">${pos.exchange}</td>
+                            </tr>
+                        `).join('');
+
+                        internationalTableEl.innerHTML = intlHTML;
+                    }
+                }
+            } catch (error) {
+                console.error('International portfolio load failed:', error);
+            }
+        }
+
+        // Load chaos attractors data
+        async function loadChaosAttractors() {
+            try {
+                const response = await auth.makeAuthenticatedRequest('/api/chaos');
+                const result = await response.json();
+
+                if (result.success) {
+                    const attractors = result.attractors;
+
+                    // Lorenz attractor (3D scatter)
+                    Plotly.newPlot('lorenzChart', [{
+                        type: 'scatter3d',
+                        mode: 'lines',
+                        x: attractors.lorenz.data.map(d => d.x),
+                        y: attractors.lorenz.data.map(d => d.y),
+                        z: attractors.lorenz.data.map(d => d.z),
+                        line: { color: '#3b82f6', width: 1 }
+                    }], {
+                        paper_bgcolor: 'rgba(0,0,0,0)',
+                        plot_bgcolor: 'rgba(0,0,0,0)',
+                        font: { color: '#e5e7eb', size: 10 },
+                        margin: { t: 0, b: 0, l: 0, r: 0 },
+                        scene: {
+                            xaxis: { visible: false },
+                            yaxis: { visible: false },
+                            zaxis: { visible: false },
+                            bgcolor: 'rgba(0,0,0,0)'
+                        }
+                    }, { displayModeBar: false });
+
+                    // Chen attractor (3D scatter)
+                    Plotly.newPlot('chenChart', [{
+                        type: 'scatter3d',
+                        mode: 'lines',
+                        x: attractors.chen.data.map(d => d.x),
+                        y: attractors.chen.data.map(d => d.y),
+                        z: attractors.chen.data.map(d => d.z),
+                        line: { color: '#10b981', width: 1 }
+                    }], {
+                        paper_bgcolor: 'rgba(0,0,0,0)',
+                        plot_bgcolor: 'rgba(0,0,0,0)',
+                        font: { color: '#e5e7eb', size: 10 },
+                        margin: { t: 0, b: 0, l: 0, r: 0 },
+                        scene: {
+                            xaxis: { visible: false },
+                            yaxis: { visible: false },
+                            zaxis: { visible: false },
+                            bgcolor: 'rgba(0,0,0,0)'
+                        }
+                    }, { displayModeBar: false });
+
+                    // Rössler attractor (3D scatter)
+                    Plotly.newPlot('rosslerChart', [{
+                        type: 'scatter3d',
+                        mode: 'lines',
+                        x: attractors.rossler.data.map(d => d.x),
+                        y: attractors.rossler.data.map(d => d.y),
+                        z: attractors.rossler.data.map(d => d.z),
+                        line: { color: '#8b5cf6', width: 1 }
+                    }], {
+                        paper_bgcolor: 'rgba(0,0,0,0)',
+                        plot_bgcolor: 'rgba(0,0,0,0)',
+                        font: { color: '#e5e7eb', size: 10 },
+                        margin: { t: 0, b: 0, l: 0, r: 0 },
+                        scene: {
+                            xaxis: { visible: false },
+                            yaxis: { visible: false },
+                            zaxis: { visible: false },
+                            bgcolor: 'rgba(0,0,0,0)'
+                        }
+                    }, { displayModeBar: false });
+                }
+            } catch (error) {
+                console.error('Chaos attractors load failed:', error);
+            }
+        }
+
+        // Load antenarrative analysis
+        async function loadAntenarrativeAnalysis() {
+            try {
+                const response = await auth.makeAuthenticatedRequest('/api/antenarrative');
+                const result = await response.json();
+
+                if (result.success) {
+                    const analysis = result.bojeAnalysis;
+
+                    // Update narrative fragments
+                    const narrativeFragmentsEl = document.getElementById('narrativeFragments');
+                    const narrativeHealthEl = document.getElementById('narrativeHealth');
+                    const emergingNarrativesEl = document.getElementById('emergingNarratives');
+
+                    if (narrativeFragmentsEl) {
+                        const fragmentsHTML = analysis.currentFragments.map(fragment => `
+                            <div class="bg-gray-800/50 rounded-lg p-3">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-white font-semibold capitalize">${fragment.type}</span>
+                                    <span class="text-sm ${fragment.strength >= 0.7 ? 'text-green-400' : fragment.strength >= 0.5 ? 'text-yellow-400' : 'text-red-400'}">
+                                        ${(fragment.strength * 100).toFixed(0)}%
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-400 mb-2">${fragment.description}</p>
+                                <div class="text-xs text-gray-500">
+                                    Symbols: ${fragment.symbols.join(', ')}
+                                </div>
+                            </div>
+                        `).join('');
+
+                        narrativeFragmentsEl.innerHTML = fragmentsHTML;
+                    }
+
+                    // Update narrative health metrics
+                    if (narrativeHealthEl) {
+                        const healthHTML = Object.entries(analysis.narrativeHealth).map(([key, value]) => `
+                            <div class="bg-gray-800/50 rounded-lg p-3">
+                                <div class="text-sm text-gray-400 capitalize">${key.replace(/([A-Z])/g, ' $1')}</div>
+                                <div class="text-lg font-semibold text-white">${(value * 100).toFixed(0)}%</div>
+                            </div>
+                        `).join('');
+
+                        narrativeHealthEl.innerHTML = healthHTML;
+                    }
+
+                    // Update emerging narratives
+                    if (emergingNarrativesEl) {
+                        const narrativesHTML = analysis.emergingNarratives.map(narrative => `
+                            <div class="inline-block bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full text-sm mr-2 mb-2">
+                                ${narrative}
+                            </div>
+                        `).join('');
+
+                        emergingNarrativesEl.innerHTML = narrativesHTML;
+                    }
+                }
+            } catch (error) {
+                console.error('Antenarrative analysis load failed:', error);
+            }
+        }
+
+        // Chat message functions
+        function addChatMessage(sender, message) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-3 rounded-lg ${sender === 'You' ? 'bg-blue-900/50 ml-8' : 'bg-gray-800/50 mr-8'}`;
+            messageDiv.innerHTML = `<div class="text-sm font-semibold text-${sender === 'You' ? 'blue' : 'yellow'}-400 mb-1">${sender}</div><div class="text-white">${message}</div>`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function sendChatMessage(message) {
+            try {
+                const response = await auth.makeAuthenticatedRequest('/api/chat', {
+                    method: 'POST',
+                    body: JSON.stringify({ message })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update analysis metrics
+                    const chatSentimentEl = document.getElementById('chatSentiment');
+                    const chatConfidenceEl = document.getElementById('chatConfidence');
+                    const chatFractalScoreEl = document.getElementById('chatFractalScore');
+
+                    if (chatSentimentEl) {
+                        chatSentimentEl.textContent = result.analysis.sentiment;
+                        chatSentimentEl.className = `text-lg font-semibold ${result.analysis.sentiment === 'bullish' ? 'text-green-400' : 'text-red-400'}`;
+                    }
+                    if (chatConfidenceEl) chatConfidenceEl.textContent = `${result.analysis.confidence}%`;
+                    if (chatFractalScoreEl) chatFractalScoreEl.textContent = result.analysis.fractalScore;
+
+                    // Add AI response
+                    setTimeout(() => addChatMessage('AI', result.message), 500 + Math.random() * 1000);
+                }
+            } catch (error) {
+                console.error('Chat message failed:', error);
+                addChatMessage('AI', 'Sorry, I encountered an error processing your message. Please try again.');
+            }
+        }
+
+        // Fetch and update dashboard
+        async function updateDashboard() {
+            try {
+                const response = await auth.makeAuthenticatedRequest('/api/dashboard');
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error('API returned success=false');
+                }
+
+                const data = result.data;
+
+                // Update portfolio summary
+                document.getElementById('portfolioValue').textContent =
+                    formatCurrency(data.portfolio.total_value);
+
+                const roi = data.performance.roi;
+                const roiElement = document.getElementById('roi');
+                roiElement.textContent = formatPercent(roi);
+                roiElement.className = `text-3xl font-bold ${roi >= 0 ? 'text-green-400' : 'text-red-400'}`;
+
+                document.getElementById('sharpe').textContent =
+                    `Sharpe: ${data.performance.sharpe.toFixed(2)}`;
+
+                const constScore = data.performance.constitutionalScore;
+                const constElement = document.getElementById('constScore');
+                constElement.textContent = formatPercent(constScore);
+                constElement.className = `text-3xl font-bold ${getScoreColor(constScore)}`;
+
+                document.getElementById('cash').textContent =
+                    formatCurrency(data.portfolio.cash);
+
+                // Update positions table
+                const positionsHTML = data.portfolio.positions.map(pos => `
+                    <tr class="border-b border-gray-700/50">
+                        <td class="py-3 text-white font-semibold">${pos.symbol}</td>
+                        <td class="py-3 text-gray-300">${pos.quantity}</td>
+                        <td class="py-3 text-gray-300">${formatCurrency(pos.avgPrice)}</td>
+                        <td class="py-3 text-gray-300">${formatCurrency(pos.value)}</td>
+                        <td class="py-3 text-gray-300">${formatPercent(pos.weight)}</td>
+                        <td class="py-3">
+                            <span class="${getScoreColor(pos.constitutionalScore)}">
+                                ${formatPercent(pos.constitutionalScore)}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('positionsTable').innerHTML = positionsHTML;
+
+                // Update pie chart
+                Plotly.newPlot('pieChart', [{
+                    type: 'pie',
+                    labels: data.portfolio.positions.map(p => p.symbol),
+                    values: data.portfolio.positions.map(p => p.weight),
+                    marker: {
+                        colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+                    }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 20, l: 20, r: 20 },
+                    showlegend: true,
+                    legend: { font: { color: '#e5e7eb' } }
+                }, {
+                    responsive: true
+                });
+
+                // Update bar chart
+                Plotly.newPlot('barChart', [{
+                    type: 'bar',
+                    x: data.portfolio.positions.map(p => p.symbol),
+                    y: data.portfolio.positions.map(p => p.constitutionalScore),
+                    marker: {
+                        color: data.portfolio.positions.map(p =>
+                            p.constitutionalScore >= 0.8 ? '#10b981' :
+                            p.constitutionalScore >= 0.6 ? '#f59e0b' : '#ef4444'
+                        )
+                    }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 40, l: 40, r: 20 },
+                    xaxis: { gridcolor: '#374151' },
+                    yaxis: {
+                        gridcolor: '#374151',
+                        range: [0, 1],
+                        tickformat: '.0%'
+                    }
+                }, {
+                    responsive: true
+                });
+
+                // Update timestamp
+                document.getElementById('lastUpdate').textContent =
+                    new Date().toLocaleTimeString();
+
+                // Update status to green
+                document.getElementById('status').innerHTML = `
+                    <span class="text-green-400 pulse">● SECURE</span>
+                    <span class="text-gray-300 ml-3">Authenticated</span>
+                `;
+
+                // Load additional data
+                await loadInternationalPortfolio();
+                await loadChaosAttractors();
+                await loadAntenarrativeAnalysis();
+
+            } catch (error) {
+                console.error('Dashboard update failed:', error);
+
+                if (error.message === 'Authentication expired') {
+                    alert('Your session has expired. Please log in again.');
+                    auth.logout();
+                    return;
+                }
+
+                // Update status to red
+                document.getElementById('status').innerHTML = `
+                    <span class="text-red-400">● ERROR</span>
+                    <span class="text-gray-300 ml-3">Connection Failed</span>
+                `;
+            }
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const loginButton = document.getElementById('loginButton');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            const loginError = document.getElementById('loginError');
+
+            // Show loading state
+            loginButton.disabled = true;
+            loginText.textContent = 'Authenticating...';
+            loginSpinner.classList.remove('hidden');
+            loginError.classList.add('hidden');
+
+            const result = await auth.login(password);
+
+            if (result.success) {
+                showDashboard();
+                updateDashboard();
+                // Start auto-refresh
+                setInterval(updateDashboard, 5000);
+            } else {
+                loginError.classList.remove('hidden');
+                loginButton.disabled = false;
+                loginText.textContent = 'Authenticate';
+                loginSpinner.classList.add('hidden');
+            }
+        });
+
+        // Logout handler
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            auth.logout();
+        });
+
+        // Chat interface handlers
+        document.getElementById('chatSend').addEventListener('click', () => {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                addChatMessage('You', message);
+                sendChatMessage(message);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('chatSend').click();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (auth.isAuthenticated()) {
+                showDashboard();
+                updateDashboard();
+                setInterval(updateDashboard, 30000); // Update every 30 seconds
+            } else {
+                showLoginForm();
+            }
+
+            console.log('🔐 Constitutional Market Harmonics - Complete Dashboard');
+            console.log('💚 Fractal Love: Profit + Ethics + Security + Chaos + AI');
+            console.log('🔑 Authentication: JWT-based');
+            console.log('🛡️ API Keys: Server-side only (never exposed to client)');
+            console.log('🌍 International Portfolio: 13 positions across 9 countries');
+            console.log('🌀 Chaos Theory: Lorenz, Chen, Rössler attractors');
+            console.log('📚 Antenarrative: David Boje\'s theory implementation');
+            console.log('💬 AI Chat: Constitutional harmonics analysis');
+        });
+    </script>
+</body>
+</html>
