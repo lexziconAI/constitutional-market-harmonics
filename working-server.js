@@ -61,11 +61,21 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const pathname = url.pathname;
-    const corsHeaders = getCorsHeaders(req.headers.origin);
-
-    // Login endpoint
+    // Serve dashboard HTML at root
+    if (pathname === '/' && req.method === 'GET') {
+        try {
+            const htmlPath = path.join(__dirname, 'dashboard_REAL.html');
+            const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+            res.writeHead(200, { ...corsHeaders, 'Content-Type': 'text/html' });
+            res.end(htmlContent);
+            return;
+        } catch (error) {
+            console.error('Error serving dashboard HTML:', error);
+            res.writeHead(500, { ...corsHeaders, 'Content-Type': 'text/html' });
+            res.end('<h1>Server Error</h1><p>Unable to load dashboard</p>');
+            return;
+        }
+    }
     if (pathname === '/api/auth/login' && req.method === 'POST') {
         let body = '';
         req.on('data', chunk => body += chunk);
@@ -550,13 +560,14 @@ const server = http.createServer((req, res) => {
 const PORT = process.env.PORT || 3002;
 const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
 server.listen(PORT, HOST, () => {
-    console.log('🔐 Constitutional Market Harmonics - Simple Secure API Server');
+    console.log('🔐 Constitutional Market Harmonics - Full Web Dashboard Server');
     console.log(`✅ Running on http://${HOST}:${PORT}`);
     console.log('💚 Fractal Love: Profit + Ethics + Security');
     console.log('🔑 Authentication: Simple token-based');
     console.log('🛡️ API Keys: Server-side only');
     console.log('');
-    console.log('Endpoints:');
+    console.log('Routes:');
+    console.log('  GET  / - Dashboard HTML page');
     console.log('  POST /api/auth/login - Login (password: fractal2025)');
     console.log('  GET  /api/dashboard - Portfolio data (requires auth)');
     console.log('  GET  /api/chaos - Chaos attractors (requires auth)');
@@ -565,5 +576,5 @@ server.listen(PORT, HOST, () => {
     console.log('  GET  /api/antenarrative - Boje analysis (requires auth)');
     console.log('  GET  /api/health - Health check');
     console.log('');
-    console.log('To start dashboard: Open dashboard_REAL.html in browser');
+    console.log('🌐 Open your browser to the deployment URL to access the dashboard');
 });
