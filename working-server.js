@@ -31,13 +31,17 @@ function generateToken() {
 // Store active tokens (in production, use Redis/database)
 const activeTokens = new Set();
 
-// CORS headers - Allow both localhost and 127.0.0.1 for development
+// CORS headers - Allow localhost for development and Render domain for production
 function getCorsHeaders(origin) {
-    const allowedOrigins = ['http://localhost:3001', 'http://127.0.0.1:3001'];
-    const isAllowed = allowedOrigins.includes(origin);
+    const allowedOrigins = [
+        'http://localhost:3001',
+        'http://127.0.0.1:3001',
+        'https://constitutional-market-harmonics-dashboard.onrender.com'
+    ];
+    const isAllowed = allowedOrigins.includes(origin) || !origin; // Allow requests with no origin (same-origin)
 
     return {
-        'Access-Control-Allow-Origin': isAllowed ? origin : 'http://localhost:3001',
+        'Access-Control-Allow-Origin': isAllowed ? (origin || 'https://constitutional-market-harmonics-dashboard.onrender.com') : 'https://constitutional-market-harmonics-dashboard.onrender.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     };
@@ -640,9 +644,10 @@ response_text = await get_response()
 });
 
 const PORT = process.env.PORT || 3002;
-server.listen(PORT, '127.0.0.1', () => {
+const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
+server.listen(PORT, HOST, () => {
     console.log('🔐 Constitutional Market Harmonics - Simple Secure API Server');
-    console.log(`✅ Running on http://127.0.0.1:${PORT}`);
+    console.log(`✅ Running on http://${HOST}:${PORT}`);
     console.log('💚 Fractal Love: Profit + Ethics + Security');
     console.log('🔑 Authentication: Simple token-based');
     console.log('🛡️ API Keys: Server-side only');
