@@ -1,11 +1,20 @@
 {
-  "name": "dashboard",
-  "version": "0.1.0",
-  "private": true,
+  "name": "constitutional-market-harmonics-dashboard",
+  "version": "1.0.0",
+  "description": "Real-time portfolio analysis with fractal intelligence and constitutional harmonics",
+  "main": "working-server-fixed.js",
   "scripts": {
-    "start": "node working-server-fixed.js"
+    "start": "node working-server-fixed.js",
+    "build": "echo 'Building... Done!' && exit 0",
+    "dev": "node working-server-fixed.js"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1"
   }
 }
