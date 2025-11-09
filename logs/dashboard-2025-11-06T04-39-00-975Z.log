@@ -1,0 +1,31 @@
+[2025-11-06T04:39:00.976Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:39:00.980Z] [BANNER] 🌍 CONSTITUTIONAL MARKET HARMONICS DASHBOARD - PERSISTENT MODE
+[2025-11-06T04:39:00.981Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:39:00.981Z] [INFO] 📁 Dashboard directory: C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard
+[2025-11-06T04:39:00.982Z] [INFO] 📝 Log file: C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\logs\dashboard-2025-11-06T04-39-00-975Z.log
+[2025-11-06T04:39:00.982Z] [INFO] ⏰ Start time: 2025-11-06T04:39:00.982Z
+[2025-11-06T04:39:00.982Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:39:00.983Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:39:00.986Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: undefined)
+[2025-11-06T04:39:00.987Z] [ERROR] ❌ BACKEND (port 12345) error: spawn npx ENOENT
+[2025-11-06T04:39:00.987Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 2)
+[2025-11-06T04:39:00.987Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 2...
+[2025-11-06T04:39:02.988Z] [START] 🚀 Starting FRONTEND (port 3001)...
+[2025-11-06T04:39:02.991Z] [SUCCESS] ✅ FRONTEND (port 3001) process started (PID: undefined)
+[2025-11-06T04:39:02.991Z] [SUCCESS] ✅ All servers started! Dashboard should be accessible at:
+[2025-11-06T04:39:02.991Z] [SUCCESS]    🌐 Frontend: http://localhost:3001
+[2025-11-06T04:39:02.991Z] [SUCCESS]    🔗 Backend API: http://localhost:12345
+[2025-11-06T04:39:02.991Z] [SUCCESS]    📊 WebSocket: ws://localhost:12345
+[2025-11-06T04:39:02.992Z] [ERROR] ❌ FRONTEND (port 3001) error: spawn npm ENOENT
+[2025-11-06T04:39:02.992Z] [RESTART] 🔄 Restarting FRONTEND (port 3001)... (Attempt 2)
+[2025-11-06T04:39:02.993Z] [WAIT] ⏳ FRONTEND (port 3001): Waiting 3 seconds before restart attempt 2...
+[2025-11-06T04:39:03.988Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:39:03.990Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: undefined)
+[2025-11-06T04:39:03.991Z] [ERROR] ❌ BACKEND (port 12345) error: spawn npx ENOENT
+[2025-11-06T04:39:03.991Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 3)
+[2025-11-06T04:39:03.991Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 3...
+[2025-11-06T04:39:05.994Z] [START] 🚀 Starting FRONTEND (port 3001)...
+[2025-11-06T04:39:05.998Z] [SUCCESS] ✅ FRONTEND (port 3001) process started (PID: undefined)
+[2025-11-06T04:39:05.999Z] [ERROR] ❌ FRONTEND (port 3001) error: spawn npm ENOENT
+[2025-11-06T04:39:06.000Z] [RESTART] 🔄 Restarting FRONTEND (port 3001)... (Attempt 3)
+[2025-11-06T04:39:06.001Z] [WAIT] ⏳ FRONTEND (port 3001): Waiting 3 seconds before restart attempt 3...

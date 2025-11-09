@@ -1,0 +1,21 @@
+# Windows pnpm Configuration
+# This enables pnpm to work properly on Windows by hoisting dependencies
+
+# Store directory - where pnpm stores actual packages
+store-dir=.pnpm-store
+
+# Shamefully hoist all dependencies to node_modules root
+# This is the recommended approach for Windows systems
+shamefully-hoist=true
+
+# Enable strict peer dependencies checking
+strict-peer-dependencies=false
+
+# Improve symlink handling on Windows
+link-workspace-packages=deep
+
+# Auto-install peer dependencies
+auto-install-peers=true
+
+# Use the latest pnpm version
+auto-install-peer-dependents=true

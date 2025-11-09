@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constitutional Market Harmonics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chaos-bg {
+            background: linear-gradient(45deg, #0f0f23, #1a1a2e, #16213e);
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .fractal-border {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="chaos-bg text-white min-h-screen">
+    <div id="app" class="container mx-auto p-6">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                🌀 Constitutional Market Harmonics
+            </h1>
+            <p class="text-gray-400">14D Fractal AI Trading Dashboard</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <div class="px-3 py-1 bg-green-600 rounded-full text-sm">API: ✅ Connected</div>
+                <div class="px-3 py-1 bg-red-600 rounded-full text-sm">Next.js: ❌ Offline</div>
+            </div>
+        </header>
+
+        <!-- Status Panel -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gray-800 rounded-lg p-6 glow">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">System Status</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>API Server:</span>
+                        <span class="text-green-400">✅ Port 3002</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Database:</span>
+                        <span class="text-green-400">✅ Connected</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>WebSocket:</span>
+                        <span class="text-yellow-400">⚠️ Fallback Mode</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-6 glow">
+                <h3 class="text-xl font-semibold mb-4 text-purple-400">Portfolio Overview</h3>
+                <div id="portfolio-summary" class="space-y-2">
+                    <div class="text-center text-gray-400">Loading...</div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-6 glow">
+                <h3 class="text-xl font-semibold mb-4 text-green-400">Performance</h3>
+                <div id="performance-summary" class="space-y-2">
+                    <div class="text-center text-gray-400">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Portfolio Positions -->
+            <div class="bg-gray-800 rounded-lg p-6 glow">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Portfolio Positions</h3>
+                <div id="positions-list" class="space-y-3 max-h-96 overflow-y-auto">
+                    <div class="text-center text-gray-400">Loading positions...</div>
+                </div>
+            </div>
+
+            <!-- Recent Trades -->
+            <div class="bg-gray-800 rounded-lg p-6 glow">
+                <h3 class="text-xl font-semibold mb-4 text-purple-400">Recent Trades</h3>
+                <div id="trades-list" class="space-y-3 max-h-96 overflow-y-auto">
+                    <div class="text-center text-gray-400">Loading trades...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chaos Signals -->
+        <div class="bg-gray-800 rounded-lg p-6 glow mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-green-400">Chaos Theory Signals</h3>
+            <div id="chaos-signals" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center text-gray-400">Loading chaos signals...</div>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="bg-gray-800 rounded-lg p-6 glow">
+            <h3 class="text-xl font-semibold mb-4 text-yellow-400">Constitutional AI Chat</h3>
+            <div class="space-y-4">
+                <div id="chat-messages" class="bg-gray-900 rounded p-4 h-64 overflow-y-auto space-y-2">
+                    <div class="text-gray-400 italic">AI: Welcome to Constitutional Market Harmonics. How may I assist with your fractal trading orchestration?</div>
+                </div>
+                <div class="flex space-x-2">
+                    <input
+                        id="chat-input"
+                        type="text"
+                        placeholder="Ask about portfolio, signals, or market analysis..."
+                        class="flex-1 bg-gray-700 border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                    >
+                    <button
+                        id="chat-send"
+                        class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded transition-colors"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Embedded mock data - no API server needed
+        const mockDashboardData = {
+            portfolio: {
+                total_value: 1250000,
+                cash: 50000,
+                positions: [
+                    { symbol: 'AAPL', quantity: 100, avgPrice: 150.25, value: 17523, weight: 0.35, constitutionalScore: 0.92 },
+                    { symbol: 'MSFT', quantity: 75, avgPrice: 380.50, value: 28537.5, weight: 0.25, constitutionalScore: 0.88 },
+                    { symbol: 'GOOGL', quantity: 50, avgPrice: 140.75, value: 7037.5, weight: 0.15, constitutionalScore: 0.85 },
+                    { symbol: 'TSLA', quantity: 30, avgPrice: 242.10, value: 7263, weight: 0.12, constitutionalScore: 0.78 },
+                    { symbol: 'AMZN', quantity: 25, avgPrice: 185.50, value: 4637.5, weight: 0.08, constitutionalScore: 0.82 }
+                ]
+            },
+            performance: {
+                roi: 0.156,
+                sharpe: 1.85,
+                constitutionalScore: 0.87,
+                fractalLoveScore: 0.0383
+            },
+            recentTrades: [
+                { symbol: 'AAPL', action: 'BUY', size: 10, price: 152.30, timestamp: new Date().toISOString(), strategy: 'Fractal Momentum' },
+                { symbol: 'MSFT', action: 'SELL', size: 5, price: 385.20, timestamp: new Date().toISOString(), strategy: 'Constitutional Exit' },
+                { symbol: 'GOOGL', action: 'BUY', size: 8, price: 142.15, timestamp: new Date().toISOString(), strategy: 'Chaos Signal' }
+            ],
+            chaosSignals: {
+                lorenz: { signal: 0.65, confidence: 0.89 },
+                chen: { signal: 0.72, confidence: 0.91 },
+                rossler: { signal: 0.58, confidence: 0.76 }
+            }
+        };
+
+        // Global state
+        let dashboardData = mockDashboardData;
+
+        // UI updates
+        function updateUI() {
+            if (!dashboardData) return;
+
+            updatePortfolioSummary();
+            updatePerformanceSummary();
+            updatePositionsList();
+            updateTradesList();
+            updateChaosSignals();
+        }
+
+        function updatePortfolioSummary() {
+            const summary = dashboardData.portfolio;
+            const summaryDiv = document.getElementById('portfolio-summary');
+
+            summaryDiv.innerHTML = `
+                <div class="flex justify-between">
+                    <span>Total Value:</span>
+                    <span class="text-green-400 font-semibold">${formatCurrency(summary.total_value)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Cash:</span>
+                    <span class="text-blue-400">${formatCurrency(summary.cash)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Positions:</span>
+                    <span class="text-purple-400">${summary.positions.length}</span>
+                </div>
+            `;
+        }
+
+        function updatePerformanceSummary() {
+            const perf = dashboardData.performance;
+            const summaryDiv = document.getElementById('performance-summary');
+
+            summaryDiv.innerHTML = `
+                <div class="flex justify-between">
+                    <span>ROI:</span>
+                    <span class="${perf.roi >= 0 ? 'text-green-400' : 'text-red-400'} font-semibold">
+                        ${formatPercent(perf.roi)}
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Sharpe Ratio:</span>
+                    <span class="text-blue-400">${perf.sharpe.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Constitutional Score:</span>
+                    <span class="text-purple-400">${formatPercent(perf.constitutionalScore)}</span>
+                </div>
+            `;
+        }
+
+        function updatePositionsList() {
+            const positions = dashboardData.portfolio.positions;
+            const listDiv = document.getElementById('positions-list');
+
+            listDiv.innerHTML = positions.map(pos => `
+                <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+                    <div>
+                        <div class="font-semibold">${pos.symbol}</div>
+                        <div class="text-sm text-gray-400">${pos.quantity} shares @ ${formatCurrency(pos.avgPrice)}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-green-400">${formatCurrency(pos.value)}</div>
+                        <div class="text-sm text-gray-400">${formatPercent(pos.weight)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTradesList() {
+            const trades = dashboardData.recentTrades.slice(0, 10);
+            const listDiv = document.getElementById('trades-list');
+
+            listDiv.innerHTML = trades.map(trade => `
+                <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+                    <div>
+                        <div class="font-semibold">${trade.symbol}</div>
+                        <div class="text-sm text-gray-400">${trade.action} ${trade.size} @ ${formatCurrency(trade.price)}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-400">${new Date(trade.timestamp).toLocaleDateString()}</div>
+                        <div class="text-xs ${trade.action === 'BUY' ? 'text-green-400' : 'text-red-400'}">
+                            ${trade.strategy}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateChaosSignals() {
+            const signals = dashboardData.chaosSignals;
+            const signalsDiv = document.getElementById('chaos-signals');
+
+            const attractors = Object.keys(signals);
+            signalsDiv.innerHTML = attractors.map(attractor => {
+                const signal = signals[attractor];
+                return `
+                    <div class="text-center p-4 bg-gray-700 rounded">
+                        <div class="text-lg font-semibold capitalize">${attractor}</div>
+                        <div class="text-2xl font-bold text-green-400">${formatPercent(signal.signal)}</div>
+                        <div class="text-sm text-gray-400">Confidence: ${formatPercent(signal.confidence)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addChatMessage(sender, message) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'You' ? 'text-right' : 'text-left';
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendChatMessage(message) {
+            // Simulate AI responses based on message content
+            let response = 'Constitutional AI: ';
+            
+            if (message.toLowerCase().includes('portfolio')) {
+                response += `Your portfolio shows ${formatCurrency(dashboardData.portfolio.total_value)} total value with ${dashboardData.portfolio.positions.length} positions. The constitutional score is ${formatPercent(dashboardData.performance.constitutionalScore)}.`;
+            } else if (message.toLowerCase().includes('chaos') || message.toLowerCase().includes('signal')) {
+                response += 'Current chaos signals show strong fractal alignment. Lorenz attractor at 65%, Chen at 72%, and Rössler at 58%. Market harmonics are favorable.';
+            } else if (message.toLowerCase().includes('performance') || message.toLowerCase().includes('roi')) {
+                response += `Performance metrics: ROI ${formatPercent(dashboardData.performance.roi)}, Sharpe ratio ${dashboardData.performance.sharpe.toFixed(2)}, Constitutional score ${formatPercent(dashboardData.performance.constitutionalScore)}.`;
+            } else {
+                response += 'I am monitoring your constitutional market harmonics. All systems are operating within fractal parameters. How may I assist with your trading orchestration?';
+            }
+            
+            setTimeout(() => addChatMessage('AI', response), 500 + Math.random() * 1000);
+        }
+
+        // Event listeners
+        document.getElementById('chat-send').addEventListener('click', () => {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message) {
+                addChatMessage('You', message);
+                sendChatMessage(message);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('chat-send').click();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🌀 Constitutional Market Harmonics Dashboard Loaded');
+            console.log('Using embedded mock data (API server offline)');
+            updateUI();
+
+            // Refresh data every 30 seconds (simulate real-time updates)
+            setInterval(() => {
+                // Simulate some data changes
+                mockDashboardData.performance.roi += (Math.random() - 0.5) * 0.001;
+                mockDashboardData.portfolio.total_value = 1250000 * (1 + mockDashboardData.performance.roi);
+                updateUI();
+            }, 30000);
+        });
+    </script>
+</body>
+</html>

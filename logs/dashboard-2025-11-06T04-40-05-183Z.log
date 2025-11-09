@@ -1,0 +1,149 @@
+[2025-11-06T04:40:05.184Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:40:05.187Z] [BANNER] 🌍 CONSTITUTIONAL MARKET HARMONICS DASHBOARD - PERSISTENT MODE
+[2025-11-06T04:40:05.187Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:40:05.187Z] [INFO] 📁 Dashboard directory: C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard
+[2025-11-06T04:40:05.188Z] [INFO] 📝 Log file: C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\logs\dashboard-2025-11-06T04-40-05-183Z.log
+[2025-11-06T04:40:05.188Z] [INFO] ⏰ Start time: 2025-11-06T04:40:05.188Z
+[2025-11-06T04:40:05.189Z] [BANNER] ═══════════════════════════════════════════════════════════
+[2025-11-06T04:40:05.189Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:40:05.200Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: 39420)
+[2025-11-06T04:40:06.420Z] [ERROR] [BACKEND (port 12345)] node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::12345
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at path (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1256:8)
+    at Object.<anonymous> (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1261:16)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\Users\regan\AppData\Local\npm-cache\_npx\fd45a72a545557e9\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1975:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 12345
+}
+
+Node.js v22.16.0
+[2025-11-06T04:40:06.469Z] [CRASH] ❌ BACKEND (port 12345) crashed with code 1
+[2025-11-06T04:40:06.470Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 2)
+[2025-11-06T04:40:06.470Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 2...
+[2025-11-06T04:40:07.202Z] [START] 🚀 Starting FRONTEND (port 3001)...
+[2025-11-06T04:40:07.212Z] [SUCCESS] ✅ FRONTEND (port 3001) process started (PID: 92808)
+[2025-11-06T04:40:07.213Z] [SUCCESS] ✅ All servers started! Dashboard should be accessible at:
+[2025-11-06T04:40:07.214Z] [SUCCESS]    🌐 Frontend: http://localhost:3001
+[2025-11-06T04:40:07.214Z] [SUCCESS]    🔗 Backend API: http://localhost:12345
+[2025-11-06T04:40:07.215Z] [SUCCESS]    📊 WebSocket: ws://localhost:12345
+[2025-11-06T04:40:07.474Z] [OUTPUT] [FRONTEND (port 3001)] > dashboard@0.1.0 dev
+> next dev
+[2025-11-06T04:40:08.031Z] [ERROR] [FRONTEND (port 3001)] ⚠ Port 3000 is in use, trying 3001 instead.
+[2025-11-06T04:40:08.140Z] [OUTPUT] [FRONTEND (port 3001)] ▲ Next.js 15.0.0
+  - Local:        http://localhost:3001
+[2025-11-06T04:40:08.142Z] [OUTPUT] [FRONTEND (port 3001)] - Environments: .env
+
+ ✓ Starting...
+[2025-11-06T04:40:09.441Z] [OUTPUT] [FRONTEND (port 3001)] ✓ Ready in 1415ms
+[2025-11-06T04:40:09.471Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:40:09.476Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: 44180)
+[2025-11-06T04:40:10.628Z] [ERROR] [BACKEND (port 12345)] node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::12345
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at path (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1256:8)
+    at Object.<anonymous> (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1261:16)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\Users\regan\AppData\Local\npm-cache\_npx\fd45a72a545557e9\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1975:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 12345
+}
+
+Node.js v22.16.0
+[2025-11-06T04:40:10.677Z] [CRASH] ❌ BACKEND (port 12345) crashed with code 1
+[2025-11-06T04:40:10.678Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 3)
+[2025-11-06T04:40:10.678Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 3...
+[2025-11-06T04:40:13.126Z] [OUTPUT] [FRONTEND (port 3001)] ○ Compiling /api/dashboard ...
+[2025-11-06T04:40:13.680Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:40:13.686Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: 81012)
+[2025-11-06T04:40:13.687Z] [OUTPUT] [FRONTEND (port 3001)] ✓ Compiled /api/dashboard in 1064ms (310 modules)
+[2025-11-06T04:40:13.768Z] [OUTPUT] [FRONTEND (port 3001)] GET /api/dashboard 200 in 1157ms
+[2025-11-06T04:40:15.184Z] [ERROR] [BACKEND (port 12345)] node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::12345
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at path (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1256:8)
+    at Object.<anonymous> (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1261:16)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\Users\regan\AppData\Local\npm-cache\_npx\fd45a72a545557e9\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1975:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 12345
+}
+
+Node.js v22.16.0
+[2025-11-06T04:40:15.236Z] [CRASH] ❌ BACKEND (port 12345) crashed with code 1
+[2025-11-06T04:40:15.237Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 4)
+[2025-11-06T04:40:15.238Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 4...
+[2025-11-06T04:40:18.238Z] [START] 🚀 Starting BACKEND (port 12345)...
+[2025-11-06T04:40:18.243Z] [SUCCESS] ✅ BACKEND (port 12345) process started (PID: 81112)
+[2025-11-06T04:40:19.527Z] [ERROR] [BACKEND (port 12345)] node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::12345
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at path (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1256:8)
+    at Object.<anonymous> (C:\Users\regan\ID SYSTEM\axiom-x\constitutional-market-harmonics\dashboard\server.ts:1261:16)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\Users\regan\AppData\Local\npm-cache\_npx\fd45a72a545557e9\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1975:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 12345
+}
+
+Node.js v22.16.0
+[2025-11-06T04:40:19.576Z] [CRASH] ❌ BACKEND (port 12345) crashed with code 1
+[2025-11-06T04:40:19.577Z] [RESTART] 🔄 Restarting BACKEND (port 12345)... (Attempt 5)
+[2025-11-06T04:40:19.577Z] [WAIT] ⏳ BACKEND (port 12345): Waiting 3 seconds before restart attempt 5...
