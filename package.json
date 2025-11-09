@@ -2,9 +2,9 @@
   "name": "constitutional-market-harmonics",
   "version": "1.0.0",
   "description": "Chaos-theoretic trading system optimizing ROI × Constitutional Impact using strange attractors",
-  "main": "src/index.js",
+  "main": "working-server-fixed.js",
   "scripts": {
-    "start": "node src/core/ConstitutionalMarketHarmonics.js",
+    "start": "node working-server-fixed.js",
     "cli": "node src/cli/cmh-cli.js",
     "demo": "node src/demo/demo.js",
     "test": "jest",
