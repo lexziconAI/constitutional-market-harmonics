@@ -1,0 +1,53 @@
+{
+  "portfolioId": "constitutional_portfolio",
+  "paperTrading": true,
+  "updateInterval": 60000,
+  "basePositionSize": 100000,
+  "targetPositionSize": 10000000,
+  "apiKeys": {
+    "alphaVantage": "d183e13f4amsh4d65751bfcfb4aep1764e8jsn8fc2088bc2e7",
+    "polygon": "GET_VALID_KEY_FROM_MASSIVE_COM"
+  },
+  "database": {
+    "path": "./data/portfolio.db"
+  },
+  "attractors": {
+    "lorenz": {
+      "sigma": 10,
+      "rho": 28,
+      "beta": 2.6666666666666665
+    },
+    "chen": {
+      "a": 5,
+      "b": -10,
+      "c": -0.38
+    },
+    "rossler": {
+      "a": 0.2,
+      "b": 0.2,
+      "c": 5.7
+    }
+  },
+  "constitutional": {
+    "axiomXIntegration": true,
+    "fallbackScoring": true,
+    "principleWeights": {
+      "ahimsa": 0.25,
+      "satya": 0.25,
+      "asteya": 0.2,
+      "brahmacharya": 0.15,
+      "aparigraha": 0.15
+    }
+  },
+  "riskManagement": {
+    "maxDrawdown": 0.2,
+    "maxConcentration": 0.1,
+    "rebalanceThreshold": 0.05,
+    "stopLoss": 0.1
+  },
+  "logging": {
+    "level": "info",
+    "file": "./logs/cmh.log",
+    "console": true
+  }
+}

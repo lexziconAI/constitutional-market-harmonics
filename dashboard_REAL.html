@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constitutional Market Harmonics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-5xl font-bold text-white mb-2">
+            🌀 Constitutional Market Harmonics
+        </h1>
+        <p class="text-gray-400 text-lg">
+            Fractal Love: Harmonizing Profit with Constitutional Alignment 💚
+        </p>
+        <div id="status" class="mt-4 inline-block px-4 py-2 rounded-lg card">
+            <span class="text-green-400 pulse">● LIVE</span>
+            <span class="text-gray-300 ml-3">Backend Connected</span>
+        </div>
+    </div>
+
+    <!-- Portfolio Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="card rounded-lg p-6">
+            <div class="text-gray-400 text-sm mb-2">Portfolio Value</div>
+            <div id="portfolioValue" class="text-3xl font-bold text-white">Loading...</div>
+            <div id="portfolioChange" class="text-sm mt-2"></div>
+        </div>
+
+        <div class="card rounded-lg p-6">
+            <div class="text-gray-400 text-sm mb-2">ROI</div>
+            <div id="roi" class="text-3xl font-bold text-white">Loading...</div>
+            <div id="sharpe" class="text-sm text-gray-400 mt-2">Sharpe: --</div>
+        </div>
+
+        <div class="card rounded-lg p-6">
+            <div class="text-gray-400 text-sm mb-2">Constitutional Score</div>
+            <div id="constScore" class="text-3xl font-bold text-white">Loading...</div>
+            <div class="text-sm text-gray-400 mt-2">Ethical Alignment</div>
+        </div>
+
+        <div class="card rounded-lg p-6">
+            <div class="text-gray-400 text-sm mb-2">Cash Reserve</div>
+            <div id="cash" class="text-3xl font-bold text-white">Loading...</div>
+            <div class="text-sm text-gray-400 mt-2">Available</div>
+        </div>
+    </div>
+
+    <!-- Portfolio Positions -->
+    <div class="card rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">Portfolio Positions</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="pb-3 text-gray-400">Symbol</th>
+                        <th class="pb-3 text-gray-400">Quantity</th>
+                        <th class="pb-3 text-gray-400">Avg Price</th>
+                        <th class="pb-3 text-gray-400">Value</th>
+                        <th class="pb-3 text-gray-400">Weight</th>
+                        <th class="pb-3 text-gray-400">Constitutional Score</th>
+                    </tr>
+                </thead>
+                <tbody id="positionsTable">
+                    <tr><td colspan="6" class="py-4 text-gray-400 text-center">Loading positions...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Portfolio Allocation -->
+        <div class="card rounded-lg p-6">
+            <h2 class="text-xl font-bold text-white mb-4">Portfolio Allocation</h2>
+            <div id="pieChart"></div>
+        </div>
+
+        <!-- Constitutional Scores -->
+        <div class="card rounded-lg p-6">
+            <h2 class="text-xl font-bold text-white mb-4">Constitutional Scores by Position</h2>
+            <div id="barChart"></div>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="card rounded-lg p-6">
+        <h2 class="text-xl font-bold text-white mb-4">System Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+                <span class="text-gray-400">Backend API:</span>
+                <span class="text-green-400 ml-2">✓ http://localhost:3002</span>
+            </div>
+            <div>
+                <span class="text-gray-400">Last Update:</span>
+                <span id="lastUpdate" class="text-gray-300 ml-2">--</span>
+            </div>
+            <div>
+                <span class="text-gray-400">Refresh Interval:</span>
+                <span class="text-gray-300 ml-2">5 seconds</span>
+            </div>
+            <div>
+                <span class="text-gray-400">Dashboard Type:</span>
+                <span class="text-blue-400 ml-2">HTML Direct (No Next.js)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Format currency
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        };
+
+        // Format percentage
+        const formatPercent = (value) => {
+            return (value * 100).toFixed(2) + '%';
+        };
+
+        // Get score color
+        const getScoreColor = (score) => {
+            if (score >= 0.8) return 'text-green-400';
+            if (score >= 0.6) return 'text-yellow-400';
+            return 'text-red-400';
+        };
+
+        // Fetch and update dashboard
+        async function updateDashboard() {
+            try {
+                const response = await fetch('http://localhost:3002/api/dashboard');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error('API returned success=false');
+                }
+
+                const data = result.data;
+
+                // Update portfolio summary
+                document.getElementById('portfolioValue').textContent =
+                    formatCurrency(data.portfolio.total_value);
+
+                const roi = data.performance.roi;
+                const roiElement = document.getElementById('roi');
+                roiElement.textContent = formatPercent(roi);
+                roiElement.className = `text-3xl font-bold ${roi >= 0 ? 'text-green-400' : 'text-red-400'}`;
+
+                document.getElementById('sharpe').textContent =
+                    `Sharpe: ${data.performance.sharpe.toFixed(2)}`;
+
+                const constScore = data.performance.constitutionalScore;
+                const constElement = document.getElementById('constScore');
+                constElement.textContent = formatPercent(constScore);
+                constElement.className = `text-3xl font-bold ${getScoreColor(constScore)}`;
+
+                document.getElementById('cash').textContent =
+                    formatCurrency(data.portfolio.cash);
+
+                // Update positions table
+                const positionsHTML = data.portfolio.positions.map(pos => `
+                    <tr class="border-b border-gray-700/50">
+                        <td class="py-3 text-white font-semibold">${pos.symbol}</td>
+                        <td class="py-3 text-gray-300">${pos.quantity}</td>
+                        <td class="py-3 text-gray-300">${formatCurrency(pos.avgPrice)}</td>
+                        <td class="py-3 text-gray-300">${formatCurrency(pos.value)}</td>
+                        <td class="py-3 text-gray-300">${formatPercent(pos.weight)}</td>
+                        <td class="py-3">
+                            <span class="${getScoreColor(pos.constitutionalScore)}">
+                                ${formatPercent(pos.constitutionalScore)}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('positionsTable').innerHTML = positionsHTML;
+
+                // Update pie chart
+                Plotly.newPlot('pieChart', [{
+                    type: 'pie',
+                    labels: data.portfolio.positions.map(p => p.symbol),
+                    values: data.portfolio.positions.map(p => p.weight),
+                    marker: {
+                        colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+                    }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 20, l: 20, r: 20 },
+                    showlegend: true,
+                    legend: { font: { color: '#e5e7eb' } }
+                }, {
+                    responsive: true
+                });
+
+                // Update bar chart
+                Plotly.newPlot('barChart', [{
+                    type: 'bar',
+                    x: data.portfolio.positions.map(p => p.symbol),
+                    y: data.portfolio.positions.map(p => p.constitutionalScore),
+                    marker: {
+                        color: data.portfolio.positions.map(p =>
+                            p.constitutionalScore >= 0.8 ? '#10b981' :
+                            p.constitutionalScore >= 0.6 ? '#f59e0b' : '#ef4444'
+                        )
+                    }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 40, l: 40, r: 20 },
+                    xaxis: { gridcolor: '#374151' },
+                    yaxis: {
+                        gridcolor: '#374151',
+                        range: [0, 1],
+                        tickformat: '.0%'
+                    }
+                }, {
+                    responsive: true
+                });
+
+                // Update timestamp
+                document.getElementById('lastUpdate').textContent =
+                    new Date().toLocaleTimeString();
+
+                // Update status to green
+                document.getElementById('status').innerHTML = `
+                    <span class="text-green-400 pulse">● LIVE</span>
+                    <span class="text-gray-300 ml-3">Backend Connected</span>
+                `;
+
+            } catch (error) {
+                console.error('Dashboard update failed:', error);
+
+                // Update status to red
+                document.getElementById('status').innerHTML = `
+                    <span class="text-red-400">● OFFLINE</span>
+                    <span class="text-gray-300 ml-3">Connection Error</span>
+                `;
+            }
+        }
+
+        // Initial load
+        updateDashboard();
+
+        // Auto-refresh every 5 seconds
+        setInterval(updateDashboard, 5000);
+
+        console.log('🌀 Constitutional Market Harmonics Dashboard');
+        console.log('💚 Fractal Love: Profit + Ethics');
+        console.log('📊 Backend: http://localhost:3002');
+        console.log('✅ HTML Direct Dashboard (No Next.js)');
+    </script>
+</body>
+</html>

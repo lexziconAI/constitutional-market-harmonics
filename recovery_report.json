@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-11-09T15:32:58.270882",
+  "project_root": "C:\\Users\\regan\\ID SYSTEM\\axiom-x\\constitutional-market-harmonics",
+  "status": {
+    "backend_dir": false,
+    "dashboard_dir": true,
+    "database_exists": true
+  },
+  "cleanup": {
+    "node_processes_killed": true,
+    "cache_cleaned": true
+  },
+  "files_scanned": {
+    "tsx_files": 10,
+    "jsx_files": 0,
+    "duplicates_found": 2
+  },
+  "recommendations": [
+    "CRITICAL: Backend directory missing - needs restoration",
+    "WARNING: 2 duplicate files found - review needed"
+  ]
+}

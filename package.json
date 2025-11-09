@@ -1,0 +1,55 @@
+{
+  "name": "constitutional-market-harmonics",
+  "version": "1.0.0",
+  "description": "Chaos-theoretic trading system optimizing ROI × Constitutional Impact using strange attractors",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/core/ConstitutionalMarketHarmonics.js",
+    "cli": "node src/cli/cmh-cli.js",
+    "demo": "node src/demo/demo.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "build": "npm run lint && npm test",
+    "db:init": "node -e \"const DatabaseManager = require('./src/database/DatabaseManager'); const db = new DatabaseManager(); db.initialize().then(() => console.log('Database initialized')).catch(console.error);\"",
+    "db:migrate": "node -e \"const DatabaseManager = require('./src/database/DatabaseManager'); const db = new DatabaseManager(); db.runMigrations().then(() => console.log('Migrations completed')).catch(console.error);\"",
+    "attractors:test": "node -e \"const AttractorManager = require('./src/attractors/AttractorManager'); const manager = new AttractorManager(); manager.initializeAttractors(); setInterval(() => { const signal = manager.generateEnsembleSignal(); console.log('Signal:', signal.decision, 'Confidence:', (signal.confidence*100).toFixed(1)+'%'); }, 1000);\"",
+    "score:test": "node -e \"const ConstitutionalScorer = require('./src/constitutional/ConstitutionalScorer'); const scorer = new ConstitutionalScorer(); scorer.scoreCompany('AAPL').then(score => console.log('AAPL Score:', score.overall)).catch(console.error);\""
+  },
+  "keywords": [
+    "trading",
+    "chaos-theory",
+    "constitutional-ai",
+    "strange-attractors",
+    "ethical-investing",
+    "fractal-love",
+    "market-harmonics"
+  ],
+  "author": "Axiom X",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "blessed": "^0.1.81",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "inquirer": "^9.2.12",
+    "mathjs": "^12.4.0",
+    "sqlite3": "^5.1.6",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "^20.9.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axiom-x/constitutional-market-harmonics"
+  }
+}

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: constitutional-market-harmonics
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+    buildCommand: npm install
+    startCommand: node dashboard/working-server-fixed.js
+    healthCheckPath: /api/health
+    readinessProbe:
+      path: /api/health
+      intervalSeconds: 10
+      timeoutSeconds: 5
+      successThreshold: 2
+      failureThreshold: 3
+    livenessProbe:
+      path: /api/health
+      intervalSeconds: 30
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 3
