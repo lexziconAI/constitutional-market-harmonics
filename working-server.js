@@ -63,9 +63,16 @@ const server = http.createServer((req, res) => {
             return;
         }
 
-        const url = new URL(req.url, `http://localhost`);
-        const pathname = url.pathname;
-        console.log('Parsed pathname:', pathname);
+        // Parse URL more robustly
+        let pathname;
+        try {
+            const url = new URL(req.url, `http://localhost`);
+            pathname = url.pathname;
+        } catch (error) {
+            // Fallback for malformed URLs
+            pathname = req.url.split('?')[0]; // Remove query string
+            if (!pathname.startsWith('/')) pathname = '/' + pathname;
+        }
         const corsHeaders = getCorsHeaders(req.headers.origin);
 
     // Serve dashboard HTML at root
@@ -574,6 +581,11 @@ const server = http.createServer((req, res) => {
 const PORT = process.env.PORT || 3002;
 const HOST = '0.0.0.0';
 console.log(`Starting server on ${HOST}:${PORT}`);
+console.log('Environment check:');
+console.log(`- PORT: ${PORT}`);
+console.log(`- NODE_ENV: ${process.env.NODE_ENV || 'undefined'}`);
+console.log(`- Working directory: ${process.cwd()}`);
+console.log(`- HTML file exists: ${fs.existsSync(path.join(__dirname, 'dashboard_REAL.html'))}`);
 server.listen(PORT, HOST, () => {
     console.log('🔐 Constitutional Market Harmonics - Full Web Dashboard Server');
     console.log(`✅ Running on http://${HOST}:${PORT}`);
