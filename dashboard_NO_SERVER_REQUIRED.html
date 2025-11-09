@@ -7,142 +7,273 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
-        body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); min-height: 100vh; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glass:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-row {
+            transition: all 0.2s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.01);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .neon-border {
+            border: 1px solid;
+            border-image: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899) 1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
     </style>
 </head>
 <body class="text-white">
     <!-- Login Form -->
-    <div id="loginForm" class="min-h-screen flex items-center justify-center">
-        <div class="glass rounded-lg p-8 w-full max-w-md">
+    <div id="loginForm" class="min-h-screen flex items-center justify-center fade-in">
+        <div class="glass rounded-2xl p-8 w-full max-w-md neon-border">
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold mb-2">🌀 Constitutional Market Harmonics</h1>
-                <p class="text-gray-200">Fractal Love: Harmonizing Profit with Constitutional Alignment 💚</p>
-                <div class="mt-4 text-sm text-yellow-400 bg-yellow-900/20 p-2 rounded">
+                <h1 class="text-4xl font-bold mb-2 gradient-text">🌀 Constitutional Market Harmonics</h1>
+                <p class="text-gray-100">Fractal Love: Harmonizing Profit with Constitutional Alignment 💚</p>
+                <div class="mt-4 text-sm text-yellow-400 bg-yellow-900/20 p-3 rounded-lg border border-yellow-500/30">
                     ⚠️ MOCK DATA MODE - No Server Required
                 </div>
             </div>
             <form id="authForm">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-2">Access Password</label>
-                    <input type="password" id="password" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500" placeholder="Enter password">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2 text-gray-100">Access Password</label>
+                    <input type="password" id="password" class="input-field w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-400" placeholder="Enter password">
                 </div>
-                <button type="submit" id="loginButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                <button type="submit" id="loginButton" class="btn-primary w-full text-white font-bold py-3 px-4 rounded-lg transition duration-200 glow">
                     <span id="loginText">Authenticate</span>
                     <div id="loginSpinner" class="hidden inline-block ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 </button>
-                <div id="loginError" class="mt-4 text-red-400 text-sm hidden">Invalid password</div>
+                <div id="loginError" class="mt-4 text-red-400 text-sm hidden bg-red-900/20 p-2 rounded border border-red-500/30">Invalid password</div>
             </form>
         </div>
     </div>
 
     <!-- Dashboard -->
-    <div id="dashboard" class="hidden min-h-screen p-6">
+    <div id="dashboard" class="hidden min-h-screen p-6 slide-up">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-4xl font-bold mb-2">🌀 Constitutional Market Harmonics</h1>
-                <p class="text-gray-200">Real-time Portfolio Analysis with Fractal Intelligence</p>
+                <h1 class="text-5xl font-bold mb-2 gradient-text">🌀 Constitutional Market Harmonics</h1>
+                <p class="text-gray-100 text-lg">Real-time Portfolio Analysis with Fractal Intelligence</p>
             </div>
             <div class="text-right">
-                <div id="status" class="text-sm">
-                    <span class="text-yellow-400 pulse">● MOCK DATA</span>
-                    <span class="text-gray-300 ml-3">Self-Contained Mode</span>
+                <div class="text-sm mb-2">
+                    <span class="text-yellow-400 pulse bg-yellow-900/20 px-2 py-1 rounded-full">● MOCK DATA</span>
+                    <span class="text-gray-100 ml-3 bg-gray-800/50 px-2 py-1 rounded-full">Self-Contained Mode</span>
                 </div>
-                <div class="text-xs text-gray-300 mt-1">Last Update: <span id="lastUpdate">Just now</span></div>
+                <div class="text-sm text-gray-100 bg-gray-800/30 px-3 py-1 rounded-lg">Last Update: <span id="lastUpdate" class="font-semibold">Just now</span></div>
             </div>
         </div>
 
         <!-- Key Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="glass rounded-lg p-6">
-                <div class="text-sm text-gray-200 mb-1">Portfolio Value</div>
-                <div id="portfolioValue" class="text-3xl font-bold">$1,250,000</div>
+            <div class="metric-card glass rounded-xl p-6 text-center">
+                <div class="text-sm text-gray-100 mb-2 font-medium">Portfolio Value</div>
+                <div id="portfolioValue" class="text-4xl font-bold text-white">$1,250,000</div>
             </div>
-            <div class="glass rounded-lg p-6">
-                <div class="text-sm text-gray-200 mb-1">ROI</div>
-                <div id="roi" class="text-3xl font-bold text-green-400">+15.6%</div>
+            <div class="metric-card glass rounded-xl p-6 text-center">
+                <div class="text-sm text-gray-100 mb-2 font-medium">ROI</div>
+                <div id="roi" class="text-4xl font-bold text-green-400">+15.6%</div>
             </div>
-            <div class="glass rounded-lg p-6">
-                <div class="text-sm text-gray-200 mb-1">Sharpe Ratio</div>
-                <div class="text-3xl font-bold text-blue-400">1.85</div>
+            <div class="metric-card glass rounded-xl p-6 text-center">
+                <div class="text-sm text-gray-100 mb-2 font-medium">Sharpe Ratio</div>
+                <div class="text-4xl font-bold text-blue-400">1.85</div>
             </div>
-            <div class="glass rounded-lg p-6">
-                <div class="text-sm text-gray-200 mb-1">Constitutional Score</div>
-                <div id="constScore" class="text-3xl font-bold text-green-400">87%</div>
+            <div class="metric-card glass rounded-xl p-6 text-center">
+                <div class="text-sm text-gray-100 mb-2 font-medium">Constitutional Score</div>
+                <div id="constScore" class="text-4xl font-bold text-green-400">87%</div>
             </div>
         </div>
 
         <!-- Charts Row -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Pie Chart -->
-            <div class="glass rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Portfolio Allocation</h3>
+            <div class="chart-container glass rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4 gradient-text">Portfolio Allocation</h3>
                 <div id="pieChart" class="w-full h-80"></div>
             </div>
             <!-- Bar Chart -->
-            <div class="glass rounded-lg p-6">
-                <h3 class="text-xl font-bold mb-4">Constitutional Scores</h3>
+            <div class="chart-container glass rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4 gradient-text">Constitutional Scores</h3>
                 <div id="barChart" class="w-full h-80"></div>
             </div>
         </div>
 
         <!-- Positions Table -->
-        <div class="glass rounded-lg p-6 mb-8">
-            <h3 class="text-xl font-bold mb-4">Portfolio Positions</h3>
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 gradient-text">Portfolio Positions</h3>
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-gray-700">
-                            <th class="text-left py-3">Symbol</th>
-                            <th class="text-left py-3">Quantity</th>
-                            <th class="text-left py-3">Avg Price</th>
-                            <th class="text-left py-3">Value</th>
-                            <th class="text-left py-3">Weight</th>
-                            <th class="text-left py-3">Constitutional Score</th>
+                            <th class="text-left py-3 text-white font-semibold">Symbol</th>
+                            <th class="text-left py-3 text-white font-semibold">Quantity</th>
+                            <th class="text-left py-3 text-white font-semibold">Avg Price</th>
+                            <th class="text-left py-3 text-white font-semibold">Value</th>
+                            <th class="text-left py-3 text-white font-semibold">Weight</th>
+                            <th class="text-left py-3 text-white font-semibold">Constitutional Score</th>
                         </tr>
                     </thead>
                     <tbody id="positionsTable">
-                        <tr class="border-b border-gray-700/50">
+                        <tr class="border-b border-gray-700/50 table-row">
                             <td class="py-3 text-white font-semibold">AAPL</td>
-                            <td class="py-3 text-gray-300">100</td>
-                            <td class="py-3 text-gray-300">$150.25</td>
-                            <td class="py-3 text-gray-300">$17,523</td>
-                            <td class="py-3 text-gray-300">35%</td>
+                            <td class="py-3 text-gray-100">100</td>
+                            <td class="py-3 text-gray-100">$150.25</td>
+                            <td class="py-3 text-gray-100">$17,523</td>
+                            <td class="py-3 text-gray-100">35%</td>
                             <td class="py-3 text-green-400">92%</td>
                         </tr>
-                        <tr class="border-b border-gray-700/50">
+                        <tr class="border-b border-gray-700/50 table-row">
                             <td class="py-3 text-white font-semibold">MSFT</td>
-                            <td class="py-3 text-gray-300">75</td>
-                            <td class="py-3 text-gray-300">$380.50</td>
-                            <td class="py-3 text-gray-300">$28,537</td>
-                            <td class="py-3 text-gray-300">25%</td>
+                            <td class="py-3 text-gray-100">75</td>
+                            <td class="py-3 text-gray-100">$380.50</td>
+                            <td class="py-3 text-gray-100">$28,537</td>
+                            <td class="py-3 text-gray-100">25%</td>
                             <td class="py-3 text-green-400">88%</td>
                         </tr>
-                        <tr class="border-b border-gray-700/50">
+                        <tr class="border-b border-gray-700/50 table-row">
                             <td class="py-3 text-white font-semibold">GOOGL</td>
-                            <td class="py-3 text-gray-300">50</td>
-                            <td class="py-3 text-gray-300">$140.75</td>
-                            <td class="py-3 text-gray-300">$7,037</td>
-                            <td class="py-3 text-gray-300">15%</td>
+                            <td class="py-3 text-gray-100">50</td>
+                            <td class="py-3 text-gray-100">$140.75</td>
+                            <td class="py-3 text-gray-100">$7,037</td>
+                            <td class="py-3 text-gray-100">15%</td>
                             <td class="py-3 text-green-400">85%</td>
                         </tr>
-                        <tr class="border-b border-gray-700/50">
+                        <tr class="border-b border-gray-700/50 table-row">
                             <td class="py-3 text-white font-semibold">TSLA</td>
-                            <td class="py-3 text-gray-300">30</td>
-                            <td class="py-3 text-gray-300">$242.10</td>
-                            <td class="py-3 text-gray-300">$7,263</td>
-                            <td class="py-3 text-gray-300">12%</td>
+                            <td class="py-3 text-gray-100">30</td>
+                            <td class="py-3 text-gray-100">$242.10</td>
+                            <td class="py-3 text-gray-100">$7,263</td>
+                            <td class="py-3 text-gray-100">12%</td>
                             <td class="py-3 text-yellow-400">78%</td>
                         </tr>
-                        <tr class="border-b border-gray-700/50">
+                        <tr class="border-b border-gray-700/50 table-row">
                             <td class="py-3 text-white font-semibold">AMZN</td>
-                            <td class="py-3 text-gray-300">25</td>
-                            <td class="py-3 text-gray-300">$185.50</td>
-                            <td class="py-3 text-gray-300">$4,637</td>
-                            <td class="py-3 text-gray-300">8%</td>
+                            <td class="py-3 text-gray-100">25</td>
+                            <td class="py-3 text-gray-100">$185.50</td>
+                            <td class="py-3 text-gray-100">$4,637</td>
+                            <td class="py-3 text-gray-100">8%</td>
                             <td class="py-3 text-green-400">82%</td>
                         </tr>
                     </tbody>
@@ -171,38 +302,38 @@
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-gray-700">
-                            <th class="text-left py-3">Symbol</th>
-                            <th class="text-left py-3">Country</th>
-                            <th class="text-left py-3">Region</th>
-                            <th class="text-left py-3">Value</th>
-                            <th class="text-left py-3">Gain/Loss</th>
-                            <th class="text-left py-3">Exchange</th>
+                            <th class="text-left py-3 text-white font-semibold">Symbol</th>
+                            <th class="text-left py-3 text-white font-semibold">Country</th>
+                            <th class="text-left py-3 text-white font-semibold">Region</th>
+                            <th class="text-left py-3 text-white font-semibold">Value</th>
+                            <th class="text-left py-3 text-white font-semibold">Gain/Loss</th>
+                            <th class="text-left py-3 text-white font-semibold">Exchange</th>
                         </tr>
                     </thead>
                     <tbody id="internationalTable">
                         <tr class="border-b border-gray-700/50">
                             <td class="py-3 text-white font-semibold">ASML.AS</td>
-                            <td class="py-3 text-gray-300">🇳🇱 Netherlands</td>
-                            <td class="py-3 text-gray-300">Europe</td>
-                            <td class="py-3 text-gray-300">$49,603</td>
+                            <td class="py-3 text-gray-100">🇳🇱 Netherlands</td>
+                            <td class="py-3 text-gray-100">Europe</td>
+                            <td class="py-3 text-gray-100">$49,603</td>
                             <td class="py-3 text-green-400">+$500 (1.02%)</td>
-                            <td class="py-3 text-gray-300 text-sm">Amsterdam</td>
+                            <td class="py-3 text-gray-100 text-sm">Amsterdam</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
                             <td class="py-3 text-white font-semibold">SAP.DE</td>
-                            <td class="py-3 text-gray-300">🇩🇪 Germany</td>
-                            <td class="py-3 text-gray-300">Europe</td>
-                            <td class="py-3 text-gray-300">$20,012</td>
+                            <td class="py-3 text-gray-100">🇩🇪 Germany</td>
+                            <td class="py-3 text-gray-100">Europe</td>
+                            <td class="py-3 text-gray-100">$20,012</td>
                             <td class="py-3 text-red-400">-$1,200 (-5.65%)</td>
-                            <td class="py-3 text-gray-300 text-sm">Xetra</td>
+                            <td class="py-3 text-gray-100 text-sm">Xetra</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
                             <td class="py-3 text-white font-semibold">CBA.AX</td>
-                            <td class="py-3 text-gray-300">🇦🇺 Australia</td>
-                            <td class="py-3 text-gray-300">Asia Pacific</td>
-                            <td class="py-3 text-gray-300">$7,818</td>
+                            <td class="py-3 text-gray-100">🇦🇺 Australia</td>
+                            <td class="py-3 text-gray-100">Asia Pacific</td>
+                            <td class="py-3 text-gray-100">$7,818</td>
                             <td class="py-3 text-green-400">+$818 (11.68%)</td>
-                            <td class="py-3 text-gray-300 text-sm">ASX</td>
+                            <td class="py-3 text-gray-100 text-sm">ASX</td>
                         </tr>
                     </tbody>
                 </table>
@@ -269,7 +400,7 @@
                                 <span class="text-sm text-green-400">85%</span>
                             </div>
                             <p class="text-sm text-gray-200 mb-2">Institutional investors positioning for AI semiconductor growth</p>
-                            <div class="text-xs text-gray-500">Symbols: ASML.AS, NVDA, TSMC</div>
+                            <div class="text-xs text-gray-400">Symbols: ASML.AS, NVDA, TSMC</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-lg p-3">
                             <div class="flex justify-between items-start mb-2">
@@ -277,7 +408,7 @@
                                 <span class="text-sm text-yellow-400">72%</span>
                             </div>
                             <p class="text-sm text-gray-200 mb-2">Narrative of sustainable energy transition gaining traction</p>
-                            <div class="text-xs text-gray-500">Symbols: ENPH, SEDG, FSLR</div>
+                            <div class="text-xs text-gray-400">Symbols: ENPH, SEDG, FSLR</div>
                         </div>
                     </div>
                 </div>
@@ -294,32 +425,32 @@
         </div>
 
         <!-- AI Chat -->
-        <div class="glass rounded-lg p-6">
-            <h3 class="text-xl font-bold mb-4">💬 Constitutional AI Chat</h3>
-            <p class="text-gray-200 mb-4">Constitutional harmonics analysis powered by AI</p>
+        <div class="glass rounded-xl p-6">
+            <h3 class="text-xl font-bold mb-4 gradient-text">💬 Constitutional AI Chat</h3>
+            <p class="text-gray-100 mb-4">Constitutional harmonics analysis powered by AI</p>
 
             <div id="chatMessages" class="bg-gray-900/50 rounded-lg p-4 h-64 overflow-y-auto mb-4 space-y-3">
-                <div class="text-center text-gray-500 text-sm py-8">
+                <div class="text-center text-gray-400 text-sm py-8">
                     Welcome to Constitutional AI Chat. Ask me about your portfolio, market patterns, or fractal analysis.
                 </div>
             </div>
 
             <div class="flex gap-2 mb-4">
-                <input type="text" id="chatInput" class="flex-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500" placeholder="Ask about portfolio analysis...">
-                <button id="chatSend" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200">Send</button>
+                <input type="text" id="chatInput" class="input-field flex-1 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-400" placeholder="Ask about portfolio analysis...">
+                <button id="chatSend" class="btn-primary text-white px-6 py-3 rounded-lg transition duration-200 glow">Send</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-gray-800/50 rounded-lg p-3">
-                    <div class="text-sm text-gray-200">Sentiment</div>
+                <div class="bg-gray-800/50 rounded-lg p-4 text-center">
+                    <div class="text-sm text-gray-100 font-medium">Sentiment</div>
                     <div id="chatSentiment" class="text-lg font-semibold text-green-400">bullish</div>
                 </div>
-                <div class="bg-gray-800/50 rounded-lg p-3">
-                    <div class="text-sm text-gray-200">Confidence</div>
+                <div class="bg-gray-800/50 rounded-lg p-4 text-center">
+                    <div class="text-sm text-gray-100 font-medium">Confidence</div>
                     <div id="chatConfidence" class="text-lg font-semibold text-white">87%</div>
                 </div>
-                <div class="bg-gray-800/50 rounded-lg p-3">
-                    <div class="text-sm text-gray-200">Fractal Score</div>
+                <div class="bg-gray-800/50 rounded-lg p-4 text-center">
+                    <div class="text-sm text-gray-100 font-medium">Fractal Score</div>
                     <div id="chatFractalScore" class="text-lg font-semibold text-cyan-400">0.92</div>
                 </div>
             </div>
