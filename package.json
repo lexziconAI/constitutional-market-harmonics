@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node working-server.js",
-    "build": "echo 'No build step required'",
+    "build": "echo 'Dependencies installed, no build required'",
     "start": "node working-server.js",
     "lint": "eslint"
   },
