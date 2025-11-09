@@ -268,6 +268,10 @@ const server = http.createServer((req, res) => {
 
             // Try multiple possible HTML file locations
             const possibleHtmlPaths = [
+                path.join(__dirname, 'dashboard_NO_SERVER_REQUIRED.html'),
+                path.join(__dirname, '..', 'dashboard_NO_SERVER_REQUIRED.html'),
+                path.join(process.cwd(), 'dashboard_NO_SERVER_REQUIRED.html'),
+                path.join(process.cwd(), 'dashboard', 'dashboard_NO_SERVER_REQUIRED.html'),
                 path.join(__dirname, 'dashboard_REAL.html'),
                 path.join(__dirname, '..', 'dashboard_REAL.html'),
                 path.join(process.cwd(), 'dashboard_REAL.html'),
