@@ -8,8 +8,8 @@ services:
         value: 10000
       - key: HOST
         value: 0.0.0.0
-    buildCommand: npm install
-    startCommand: node dashboard/working-server-fixed.js
+    buildCommand: pnpm install --frozen-lockfile
+    startCommand: node working-server-fixed.js
     healthCheckPath: /api/health
     readinessProbe:
       path: /api/health
