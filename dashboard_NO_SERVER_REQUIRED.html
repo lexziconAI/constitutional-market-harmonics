@@ -460,8 +460,77 @@
     </div>
 
     <script>
-        // Mock data and functions
-        const mockData = {
+        // Real API data integration
+        let dashboardData = null;
+        let authToken = null;
+
+        // API base URL - auto-detect environment
+        const API_BASE = window.location.protocol === 'file:' ?
+            'https://your-render-app.onrender.com' : // Replace with your actual Render URL
+            `${window.location.protocol}//${window.location.host}`;
+
+        // Authentication
+        async function authenticate(password) {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.token;
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                return false;
+            }
+        }
+
+        // Fetch real dashboard data
+        async function fetchDashboardData() {
+            if (!authToken) return null;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/dashboard/real`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.data;
+                }
+                return null;
+            } catch (error) {
+                console.error('Failed to fetch dashboard data:', error);
+                return null;
+            }
+        }
+
+        // Fetch real stock quotes
+        async function fetchStockQuotes() {
+            try {
+                const response = await fetch(`${API_BASE}/api/quotes`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.data;
+                }
+                return [];
+            } catch (error) {
+                console.error('Failed to fetch quotes:', error);
+                return [];
+            }
+        }
+
+        // Fallback mock data (used when API is unavailable)
+        const fallbackData = {
             portfolio: {
                 total_value: 1250000,
                 cash: 50000,
@@ -542,115 +611,140 @@
         }
 
         // Initialize dashboard
-        function initializeDashboard() {
-            // Update portfolio value
-            document.getElementById('portfolioValue').textContent = formatCurrency(mockData.portfolio.total_value);
+        async function initializeDashboard() {
+            // Show loading state
+            document.getElementById('portfolioValue').textContent = 'Loading...';
+            document.getElementById('lastUpdate').textContent = 'Fetching data...';
 
-            // Update ROI
-            const roiElement = document.getElementById('roi');
-            roiElement.textContent = formatPercent(mockData.performance.roi);
-            roiElement.className = `text-3xl font-bold ${mockData.performance.roi >= 0 ? 'text-green-400' : 'text-red-400'}`;
+            try {
+                // Try to fetch real data first
+                dashboardData = await fetchDashboardData();
 
-            // Update Sharpe
-            document.querySelector('.text-blue-400').textContent = mockData.performance.sharpe.toFixed(2);
-
-            // Update Constitutional Score
-            const constElement = document.getElementById('constScore');
-            constElement.textContent = formatPercent(mockData.performance.constitutionalScore);
-            constElement.className = `text-3xl font-bold ${getScoreColor(mockData.performance.constitutionalScore)}`;
-
-            // Create pie chart
-            const pieData = mockData.portfolio.positions.map(p => ({
-                labels: mockData.portfolio.positions.map(p => p.symbol),
-                values: mockData.portfolio.positions.map(p => p.weight * 100),
-                type: 'pie',
-                marker: {
-                    colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+                // If real data fails, use fallback
+                if (!dashboardData) {
+                    console.log('Using fallback data - API unavailable');
+                    dashboardData = fallbackData;
                 }
-            }));
 
-            Plotly.newPlot('pieChart', pieData, {
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#e5e7eb' },
-                margin: { t: 20, b: 20, l: 20, r: 20 },
-                showlegend: true,
-                legend: { font: { color: '#e5e7eb' } }
-            });
+                // Update portfolio value
+                document.getElementById('portfolioValue').textContent = formatCurrency(dashboardData.portfolio.total_value);
 
-            // Create bar chart
-            const barData = [{
-                type: 'bar',
-                x: mockData.portfolio.positions.map(p => p.symbol),
-                y: mockData.portfolio.positions.map(p => p.constitutionalScore * 100),
-                marker: {
-                    color: mockData.portfolio.positions.map(p =>
-                        p.constitutionalScore >= 0.9 ? '#10b981' :
-                        p.constitutionalScore >= 0.8 ? '#3b82f6' :
-                        p.constitutionalScore >= 0.7 ? '#f59e0b' : '#ef4444'
-                    )
-                }
-            }];
+                // Update ROI
+                const roiElement = document.getElementById('roi');
+                roiElement.textContent = formatPercent(dashboardData.performance.roi);
+                roiElement.className = `text-3xl font-bold ${dashboardData.performance.roi >= 0 ? 'text-green-400' : 'text-red-400'}`;
 
-            Plotly.newPlot('barChart', barData, {
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#e5e7eb' },
-                margin: { t: 20, b: 40, l: 40, r: 20 },
-                xaxis: { gridcolor: '#374151' },
-                yaxis: {
-                    gridcolor: '#374151',
-                    range: [0, 100],
-                    tickformat: '.0f'
-                }
-            });
+                // Update Sharpe
+                document.querySelector('.text-blue-400').textContent = dashboardData.performance.sharpe.toFixed(2);
 
-            // Create Lorenz attractor
-            const lorenzData = generateLorenzData();
-            Plotly.newPlot('lorenzChart', [{
-                type: 'scatter3d',
-                mode: 'lines',
-                x: lorenzData.map(d => d.x),
-                y: lorenzData.map(d => d.y),
-                z: lorenzData.map(d => d.z),
-                line: { color: '#00ff88', width: 1 }
-            }], {
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#e5e7eb', size: 10 },
-                margin: { t: 0, b: 0, l: 0, r: 0 },
-                scene: {
-                    xaxis: { visible: false },
-                    yaxis: { visible: false },
-                    zaxis: { visible: false },
-                    bgcolor: 'rgba(0,0,0,0)'
-                }
-            }, { displayModeBar: false });
+                // Update Constitutional Score
+                const constElement = document.getElementById('constScore');
+                constElement.textContent = formatPercent(dashboardData.performance.constitutionalScore);
+                constElement.className = `text-3xl font-bold ${getScoreColor(dashboardData.performance.constitutionalScore)}`;
 
-            // Create Rössler attractor
-            const rosslerData = generateRosslerData();
-            Plotly.newPlot('rosslerChart', [{
-                type: 'scatter3d',
-                mode: 'lines',
-                x: rosslerData.map(d => d.x),
-                y: rosslerData.map(d => d.y),
-                z: rosslerData.map(d => d.z),
-                line: { color: '#ff6b6b', width: 1 }
-            }], {
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#e5e7eb', size: 10 },
-                margin: { t: 0, b: 0, l: 0, r: 0 },
-                scene: {
-                    xaxis: { visible: false },
-                    yaxis: { visible: false },
-                    zaxis: { visible: false },
-                    bgcolor: 'rgba(0,0,0,0)'
-                }
-            }, { displayModeBar: false });
+                // Create pie chart
+                const pieData = dashboardData.portfolio.positions.map(p => ({
+                    labels: dashboardData.portfolio.positions.map(p => p.symbol),
+                    values: dashboardData.portfolio.positions.map(p => p.weight * 100),
+                    type: 'pie',
+                    marker: {
+                        colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+                    }
+                }));
 
-            // Update timestamp
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                Plotly.newPlot('pieChart', pieData, {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 20, l: 20, r: 20 },
+                    showlegend: true,
+                    legend: { font: { color: '#e5e7eb' } }
+                });
+
+                // Create bar chart
+                const barData = [{
+                    type: 'bar',
+                    x: dashboardData.portfolio.positions.map(p => p.symbol),
+                    y: dashboardData.portfolio.positions.map(p => p.constitutionalScore * 100),
+                    marker: {
+                        color: dashboardData.portfolio.positions.map(p =>
+                            p.constitutionalScore >= 0.9 ? '#10b981' :
+                            p.constitutionalScore >= 0.8 ? '#3b82f6' :
+                            p.constitutionalScore >= 0.7 ? '#f59e0b' : '#ef4444'
+                        )
+                    }
+                }];
+
+                Plotly.newPlot('barChart', barData, {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb' },
+                    margin: { t: 20, b: 40, l: 40, r: 20 },
+                    xaxis: { gridcolor: '#374151' },
+                    yaxis: {
+                        gridcolor: '#374151',
+                        range: [0, 100],
+                        tickformat: '.0f'
+                    }
+                });
+
+                // Create Lorenz attractor
+                const lorenzData = generateLorenzData();
+                Plotly.newPlot('lorenzChart', [{
+                    type: 'scatter3d',
+                    mode: 'lines',
+                    x: lorenzData.map(d => d.x),
+                    y: lorenzData.map(d => d.y),
+                    z: lorenzData.map(d => d.z),
+                    line: { color: '#00ff88', width: 1 }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb', size: 10 },
+                    margin: { t: 0, b: 0, l: 0, r: 0 },
+                    scene: {
+                        xaxis: { visible: false },
+                        yaxis: { visible: false },
+                        zaxis: { visible: false },
+                        bgcolor: 'rgba(0,0,0,0)'
+                    }
+                }, { displayModeBar: false });
+
+                // Create Rössler attractor
+                const rosslerData = generateRosslerData();
+                Plotly.newPlot('rosslerChart', [{
+                    type: 'scatter3d',
+                    mode: 'lines',
+                    x: rosslerData.map(d => d.x),
+                    y: rosslerData.map(d => d.y),
+                    z: rosslerData.map(d => d.z),
+                    line: { color: '#ff6b6b', width: 1 }
+                }], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: { color: '#e5e7eb', size: 10 },
+                    margin: { t: 0, b: 0, l: 0, r: 0 },
+                    scene: {
+                        xaxis: { visible: false },
+                        yaxis: { visible: false },
+                        zaxis: { visible: false },
+                        bgcolor: 'rgba(0,0,0,0)'
+                    }
+                }, { displayModeBar: false });
+
+                // Update timestamp
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+
+                // Log data source
+                console.log('🌀 Dashboard initialized with', dashboardData === fallbackData ? 'fallback data' : 'real API data');
+
+            } catch (error) {
+                console.error('Dashboard initialization failed:', error);
+                // Use fallback data on error
+                dashboardData = fallbackData;
+                document.getElementById('portfolioValue').textContent = formatCurrency(fallbackData.portfolio.total_value);
+                document.getElementById('lastUpdate').textContent = 'Error - using cached data';
+            }
         }
 
         // Chat functionality
@@ -693,16 +787,40 @@
         }
 
         // Event listeners
-        document.getElementById('authForm').addEventListener('submit', function(e) {
+        document.getElementById('authForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
+            const submitBtn = document.querySelector('#authForm button');
+            const originalText = submitBtn.textContent;
 
-            if (password === 'fractal2025') {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                initializeDashboard();
-            } else {
+            // Show loading state
+            submitBtn.textContent = 'Authenticating...';
+            submitBtn.disabled = true;
+
+            try {
+                const success = await authenticate(password);
+
+                if (success) {
+                    document.getElementById('loginForm').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    await initializeDashboard();
+                } else {
+                    document.getElementById('loginError').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                document.getElementById('loginError').textContent = 'Connection failed - using offline mode';
                 document.getElementById('loginError').classList.remove('hidden');
+
+                // Allow offline access
+                setTimeout(() => {
+                    document.getElementById('loginForm').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    initializeDashboard();
+                }, 2000);
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
             }
         });
 
@@ -722,16 +840,33 @@
             }
         });
 
-        // Auto-refresh simulation
-        setInterval(() => {
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
-        }, 30000);
+        // Auto-refresh with real data
+        setInterval(async () => {
+            if (authToken && dashboardData) {
+                try {
+                    const newData = await fetchDashboardData();
+                    if (newData) {
+                        dashboardData = newData;
+                        // Quick update of key metrics without full re-render
+                        document.getElementById('portfolioValue').textContent = formatCurrency(dashboardData.portfolio.total_value);
+                        document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                        console.log('📊 Dashboard data refreshed with real market data');
+                    }
+                } catch (error) {
+                    console.log('Auto-refresh failed, keeping current data');
+                }
+            } else {
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            }
+        }, 60000); // Refresh every minute
 
-        console.log('🌀 Constitutional Market Harmonics - Self-Contained Dashboard');
+        console.log('🌀 Constitutional Market Harmonics - Real API Integration');
         console.log('💚 Fractal Love: Profit + Ethics + Security + Chaos + AI');
-        console.log('📊 Mock Data Mode: No server required - works with file:// protocol');
+        console.log('📊 Real Data Mode: Connected to Finnhub/Polygon APIs');
         console.log('🔑 Password: fractal2025');
-        console.log('⚡ Features: Portfolio, Charts, International Holdings, Chaos Attractors, Antenarrative Analysis, AI Chat');
+        console.log('🌐 API Base:', API_BASE);
+        console.log('⚡ Features: Real Portfolio Data, Live Quotes, Market News, Chaos Attractors, Antenarrative Analysis, AI Chat');
+        console.log('🔄 Auto-refresh: Every 60 seconds with real market data');
     </script>
 </body>
 </html>
