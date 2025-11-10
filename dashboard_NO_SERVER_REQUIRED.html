@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.plot.ly https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;">
     <title>🌀 Constitutional Market Harmonics - Self-Contained Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌀</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -282,19 +284,19 @@
         </div>
 
         <!-- International Portfolio -->
-        <div class="glass rounded-lg p-6 mb-8">
-            <h3 class="text-xl font-bold mb-4">🌍 International Portfolio</h3>
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 gradient-text">🌍 International Portfolio</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">International Allocation</div>
+                    <div class="text-sm text-gray-100">International Allocation</div>
                     <div class="text-2xl font-bold text-blue-400">40.7%</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Countries</div>
+                    <div class="text-sm text-gray-100">Countries</div>
                     <div class="text-2xl font-bold text-green-400">9</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Regions</div>
+                    <div class="text-sm text-gray-100">Regions</div>
                     <div class="text-2xl font-bold text-purple-400">3</div>
                 </div>
             </div>
@@ -341,19 +343,19 @@
         </div>
 
         <!-- Chaos Theory Attractors -->
-        <div class="glass rounded-lg p-6 mb-8">
-            <h3 class="text-xl font-bold mb-4">🌀 Chaos Theory Attractors</h3>
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 gradient-text">🌀 Chaos Theory Attractors</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Fractal Dimension</div>
+                    <div class="text-sm text-gray-100">Fractal Dimension</div>
                     <div class="text-2xl font-bold text-cyan-400">2.073</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Entropy</div>
+                    <div class="text-sm text-gray-100">Entropy</div>
                     <div class="text-2xl font-bold text-orange-400">0.847</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Stability</div>
+                    <div class="text-sm text-gray-100">Stability</div>
                     <div class="text-2xl font-bold text-green-400">0.923</div>
                 </div>
             </div>
@@ -370,23 +372,23 @@
         </div>
 
         <!-- Antenarrative Analysis -->
-        <div class="glass rounded-lg p-6 mb-8">
-            <h3 class="text-xl font-bold mb-4">📚 David Boje Antenarrative Analysis</h3>
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 gradient-text">📚 David Boje Antenarrative Analysis</h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Coherence</div>
+                    <div class="text-sm text-gray-100">Coherence</div>
                     <div class="text-2xl font-bold text-blue-400">76%</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Stability</div>
+                    <div class="text-sm text-gray-100">Stability</div>
                     <div class="text-2xl font-bold text-green-400">82%</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Adaptability</div>
+                    <div class="text-sm text-gray-100">Adaptability</div>
                     <div class="text-2xl font-bold text-purple-400">91%</div>
                 </div>
                 <div class="bg-gray-800/50 rounded-lg p-4">
-                    <div class="text-sm text-gray-200">Constitutional Alignment</div>
+                    <div class="text-sm text-gray-100">Constitutional Alignment</div>
                     <div class="text-2xl font-bold text-green-400">88%</div>
                 </div>
             </div>
